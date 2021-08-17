@@ -48,12 +48,26 @@ ExportedObj/
 *.pdb.meta
 *.mdb.meta
 
+# Unity3d generated meta files
+*.meta
+*.cs.meta
+*.mat
+*.pdf
+*.asset
+*.txt
+
+#Assets and others folders
+Library/
+Logs/
+
 # Unity3D generated file on crash reports
 sysinfo.txt
 
 # Builds
 *.apk
 *.unitypackage
+build/
+obj/
 
 # Crashlytics generated file
 crashlytics-build.properties
