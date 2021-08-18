@@ -89,6 +89,7 @@ public class ChatManager : MonoBehaviour
     {
         // ?? ar we need CreateChatMessage call on client? or not?
         ClientSend.PlayerSendChatMessage(getCurrentMessage);
+        chatPlayerMessageInputField.text = string.Empty;
         CloseChatMessageInput();
     }
 
@@ -96,6 +97,7 @@ public class ChatManager : MonoBehaviour
     {
         GameObject _chatMessage = Instantiate(chatMessagePrefab, chatPanel.transform);
         _chatMessage.GetComponent<ChatMessage>().Initialize(_userId, _message);
+        _chatMessage.transform.SetAsLastSibling();
         if (messages.ContainsKey(_userId))
             messages[_userId].Add(_chatMessage.GetComponent<ChatMessage>());
         else

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
+    public GameObject ChatPanel;
     public GameObject startMenu;
     public InputField usernameField;
 

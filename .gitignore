@@ -68,6 +68,7 @@ sysinfo.txt
 *.unitypackage
 build/
 obj/
+Temp/
 
 # Crashlytics generated file
 crashlytics-build.properties

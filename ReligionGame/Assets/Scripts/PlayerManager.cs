@@ -11,12 +11,28 @@ public class PlayerManager : MonoBehaviour
     public int itemCount = 0;
     public MeshRenderer model;
 
+    public GameObject objectViewInfo;
 
     public void Initialize(int _id, string _username)
     {
         id = _id;
         username = _username;
         health = maxHealth;
+
+        SetPlayerInfoView();
+        ActiveChatPanel();
+    }
+
+    public void SetPlayerInfoView()
+    {
+        if (id != Client.instance.myId) { 
+            objectViewInfo.GetComponent<ObjectInfoView>().text = username;
+        }
+    }
+
+    public void ActiveChatPanel()
+    {
+        UIManager.instance.ChatPanel.SetActive(true);
     }
 
     public void SetHealth(float _health)
