@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -11,6 +12,8 @@ public class UIManager : MonoBehaviour
     public GameObject ChatPanel;
     public GameObject startMenu;
     public InputField usernameField;
+
+    public Image buttonPrefab;
 
     private void Awake()
     {
