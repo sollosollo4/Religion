@@ -35,22 +35,22 @@ public class ChatManager : MonoBehaviour
      * .give_item 0,10,0  - hard command. give item to player with id 0, quantity 10, and level 0
      * .set_new_spawn_enemy_point 8,[4.55,78.11,19.1] - very hard command. spawn point of enemies with level 8, at coordinations x:4.55, y:78.11, z:19.1
      */
-    public static void MessageController(string message)
+    public static void MessageController(int _playerId, string _message)
     {
-        if(ChatCommand.ChatCommands.Contains(message))
+        if(ChatCommand.ChatCommands.Contains(_message))
         {
-            string[] _params = message.Split(' ')[1].Split(',');
-            instance.CommandInstance.ExecuteCommand(message.Split(' ')[0], _params);
+            string[] _params = _message.Split(' ')[1].Split(',');
+            instance.CommandInstance.ExecuteCommand(_message.Split(' ')[0], _params);
             return;
         }
         
-        if(ChatManager.ForbiddenWords.Contains(message))
+        if(ChatManager.ForbiddenWords.Contains(_message))
         {
-            string []_params = new string[1] { Array.IndexOf(ForbiddenWords, message).ToString() };
+            string []_params = new string[1] { Array.IndexOf(ForbiddenWords, _message).ToString() };
             instance.CommandInstance.ExecuteCommand("ForbiddenError", _params);
             return;
         }
 
-        ServerSend.PlayerChatMessage(_fromClient, _message);
+        ServerSend.PlayerChatMessage(_playerId, _message);
     }
 }
