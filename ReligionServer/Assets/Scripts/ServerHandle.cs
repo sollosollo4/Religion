@@ -47,6 +47,5 @@ public class ServerHandle
     {
         string _message = _packet.ReadString();
         ChatManager.MessageController(_message);
-        ServerSend.PlayerChatMessage(_fromClient, _message);
     }
 }

@@ -41,11 +41,16 @@ public class ChatManager : MonoBehaviour
         {
             string[] _params = message.Split(' ')[1].Split(',');
             instance.CommandInstance.ExecuteCommand(message.Split(' ')[0], _params);
+            return;
         }
+        
         if(ChatManager.ForbiddenWords.Contains(message))
         {
             string []_params = new string[1] { Array.IndexOf(ForbiddenWords, message).ToString() };
             instance.CommandInstance.ExecuteCommand("ForbiddenError", _params);
+            return;
         }
+
+        ServerSend.PlayerChatMessage(_fromClient, _message);
     }
 }
