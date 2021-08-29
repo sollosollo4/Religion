@@ -23,7 +23,8 @@ public enum ServerPackets
     spawnEnemy,
     enemyPosition,
     enemyHealth,
-    chatMessage
+    chatMessage,
+    tryConnection
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -33,7 +34,8 @@ public enum ClientPackets
     playerMovement,
     playerShoot,
     playerThrowItem,
-    chatMessage
+    chatMessage,
+    tryConnection 
 }
 
 public class Packet : IDisposable

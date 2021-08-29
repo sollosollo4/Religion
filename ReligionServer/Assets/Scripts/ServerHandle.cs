@@ -48,4 +48,19 @@ public class ServerHandle
         string _message = _packet.ReadString();
         ChatManager.MessageController(_fromClient, _message);
     }
+
+    public static void PlayerTryConnection(int _fromClient, Packet _packet)
+    {
+        string _login = _packet.ReadString();
+        string _password = _packet.ReadString();
+
+        if(_login == "123" && _password == "123")
+        {
+            Server.clients[_fromClient].AuthConnection(_fromClient, true);
+        }
+        else
+        {
+            Server.clients[_fromClient].AuthConnection(_fromClient, false);
+        }
+    }
 }

@@ -23,7 +23,8 @@ public enum ServerPackets
     spawnEnemy,
     enemyPosition,
     enemyHealth,
-    chatMessage
+    chatMessage,
+    playerTryConnection
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -33,7 +34,8 @@ public enum ClientPackets
     playerMovement,
     playerShoot,
     playerThrowItem,
-    chatMessage
+    chatMessage,
+    playerTryConnection
 }
 
 public class Packet : IDisposable
@@ -193,6 +195,14 @@ public class Packet : IDisposable
         Write(_value.y);
         Write(_value.z);
         Write(_value.w);
+    }
+
+    public void Write(List<Character> characters)
+    {
+        foreach(Character chr in characters)
+        {
+            chr.WriteData(this);
+        }
     }
     #endregion
 

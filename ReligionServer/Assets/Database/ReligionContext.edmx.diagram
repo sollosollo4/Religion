@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="42b82a3b02394240b6a6490e556a8231" Name="Diagram1" >
+        <EntityTypeShape EntityType="ReligionContext.Account" Width="1.5" PointX="1.75" PointY="2.5" />
+        <EntityTypeShape EntityType="ReligionContext.Character" Width="1.5" PointX="6.25" PointY="3.125" />
+        <AssociationConnector Association="ReligionContext.AccountCharacter" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

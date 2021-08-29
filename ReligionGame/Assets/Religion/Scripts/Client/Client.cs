@@ -31,11 +31,18 @@ public class Client : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+
+        DontDestroyOnLoad(this.gameObject);
     }
 
     private void OnApplicationQuit()
     {
         Disconnect(); // Disconnect when the game is closed
+    }
+
+    public bool isValid()
+    {
+        return (tcp == null || udp == null) ? false : true;
     }
 
     /// <summary>Attempts to connect to the server.</summary>
@@ -311,6 +318,7 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.enemyPosition, ClientHandle.EnemyPosition },
             { (int)ServerPackets.enemyHealth, ClientHandle.EnemyHealth },
             { (int)ServerPackets.chatMessage, ClientHandle.CreateChatMessage },
+            { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection }
         };
         Debug.Log("Initialized packets.");
     }

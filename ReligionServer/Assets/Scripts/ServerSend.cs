@@ -76,12 +76,13 @@ public class ServerSend
     /// <summary>Sends a welcome message to the given client.</summary>
     /// <param name="_toClient">The client to send the packet to.</param>
     /// <param name="_msg">The message to send.</param>
-    public static void Welcome(int _toClient, string _msg)
+    public static void Welcome(int _toClient, string _msg, List<Character> characters)
     {
         using (Packet _packet = new Packet((int)ServerPackets.welcome))
         {
             _packet.Write(_msg);
             _packet.Write(_toClient);
+            _packet.Write(characters);
 
             SendTCPData(_toClient, _packet);
         }
@@ -279,6 +280,17 @@ public class ServerSend
             _packet.Write(_message);
             
             SendTCPDataToAll(_packet);
+        }
+    }
+
+    public static void PlayerTryConnection(int _byPlayer, bool _success, string _message)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerTryConnection))
+        {
+            _packet.Write(_success);
+            _packet.Write(_message);
+
+            SendTCPData(_byPlayer, _packet);
         }
     }
     #endregion

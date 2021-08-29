@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -13,7 +14,7 @@ public class UIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
 
-    public Image buttonPrefab;
+    public CharacterPickerObject pickedCharacter;
 
     private void Awake()
     {
@@ -31,13 +32,12 @@ public class UIManager : MonoBehaviour
     /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
-        startMenu.SetActive(false);
-        usernameField.interactable = false;
-        Client.instance.ConnectToServer();
-    }
+        //startMenu.SetActive(false);
+        //usernameField.interactable = false;
+        if(!Client.instance.isValid())
+            Client.instance.ConnectToServer();
 
-    public void FocusToInputField()
-    {
-        
+        ClientSend.WelcomeReceived();
+        SceneManager.LoadScene("Main");
     }
 }

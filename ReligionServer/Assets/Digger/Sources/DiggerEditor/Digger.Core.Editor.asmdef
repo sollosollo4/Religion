@@ -1,0 +1,19 @@
+{
+    "name": "Digger.Core.Editor",
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:b6af883ec2a5d8f4f9ff7b816453f7b7",
+        "GUID:4f7962e29039b45a28291620ed7b84cf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

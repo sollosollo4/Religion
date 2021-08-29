@@ -247,6 +247,12 @@ public class Client
         }
     }
 
+    public void AuthConnection(int _playerId, bool _isSuccess)
+    {
+        string _message = $"Подключено прошло {(_isSuccess ? "успешно" : "с ошибкой")}";
+        ServerSend.PlayerTryConnection(_playerId, _isSuccess, _message);
+    }
+
     /// <summary>Disconnects the client and stops all network traffic.</summary>
     private void Disconnect()
     {
@@ -254,8 +260,11 @@ public class Client
 
         ThreadManager.ExecuteOnMainThread(() =>
         {
-            UnityEngine.Object.Destroy(player.gameObject);
-            player = null;
+            if (player)
+            {
+                UnityEngine.Object.Destroy(player.gameObject);
+                player = null;
+            }
         });
 
         tcp.Disconnect();
