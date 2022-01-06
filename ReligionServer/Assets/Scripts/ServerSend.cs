@@ -76,7 +76,7 @@ public class ServerSend
     /// <summary>Sends a welcome message to the given client.</summary>
     /// <param name="_toClient">The client to send the packet to.</param>
     /// <param name="_msg">The message to send.</param>
-    public static void Welcome(int _toClient, string _msg, List<Character> characters)
+    /*public static void Welcome(int _toClient, string _msg, List<Character> characters)
     {
         using (Packet _packet = new Packet((int)ServerPackets.welcome))
         {
@@ -86,7 +86,7 @@ public class ServerSend
 
             SendTCPData(_toClient, _packet);
         }
-    }
+    }*/
 
     /// <summary>Tells a client to spawn a player.</summary>
     /// <param name="_toClient">The client that should spawn the player.</param>
@@ -283,12 +283,18 @@ public class ServerSend
         }
     }
 
-    public static void PlayerTryConnection(int _byPlayer, bool _success, string _message)
+    public static void PlayerTryConnection(int _byPlayer, bool _success, string _message, Dictionary<int, Character> _characters)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerTryConnection))
         {
             _packet.Write(_success);
             _packet.Write(_message);
+            _packet.Write(_byPlayer);
+            foreach(Character _clientCharacter in _characters.Values)
+            {
+                _packet.Write(_clientCharacter.CharacterName);
+                _packet.Write(_clientCharacter.CharacterClass.CharacterClassCode);
+            }
 
             SendTCPData(_byPlayer, _packet);
         }

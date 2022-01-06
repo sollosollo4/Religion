@@ -123,6 +123,7 @@ public class Server
         for (int i = 1; i <= MaxPlayers; i++)
         {
             clients.Add(i, new Client(i));
+            clients[i].getCharacters();
         }
 
         packetHandlers = new Dictionary<int, PacketHandler>()
@@ -132,8 +133,10 @@ public class Server
             { (int)ClientPackets.playerShoot, ServerHandle.PlayerShoot },
             { (int)ClientPackets.playerThrowItem, ServerHandle.PlayerThrowItem },
             { (int)ClientPackets.chatMessage, ServerHandle.PlayerChatMessage },
-            { (int)ClientPackets.playerTryConnection, ServerHandle.PlayerTryConnection }
+            { (int)ClientPackets.playerTryConnection, ServerHandle.PlayerTryConnection },
+            { (int)ClientPackets.characterNew, ServerHandle.CharacterNew}
         };
+
         Debug.Log("Initialized packets.");
     }
 

@@ -29,14 +29,8 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>Attempts to connect to the server.</summary>
     public void ConnectToServer()
     {
-        //startMenu.SetActive(false);
-        //usernameField.interactable = false;
-        if(!Client.instance.isValid())
-            Client.instance.ConnectToServer();
-
         ClientSend.WelcomeReceived();
         SceneManager.LoadScene("Main");
     }

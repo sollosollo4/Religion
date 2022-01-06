@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -62,5 +63,13 @@ public class ServerHandle
         {
             Server.clients[_fromClient].AuthConnection(_fromClient, false);
         }
+    }
+
+    internal static void CharacterNew(int _fromClient, Packet _packet)
+    {
+        string _name = _packet.ReadString();
+        string _className = _packet.ReadString();
+
+        
     }
 }

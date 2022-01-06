@@ -1060,6 +1060,7 @@ MonoBehaviour:
   ChatPanel: {fileID: 509373466}
   startMenu: {fileID: 0}
   usernameField: {fileID: 0}
+  pickedCharacter: {fileID: 0}
 --- !u!1 &1071566364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,7 +1097,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 99.79999, y: 11.899994}
+  m_AnchoredPosition: {x: 99.79999, y: 11.900024}
   m_SizeDelta: {x: 196.2, y: 16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1071566366
@@ -1501,7 +1502,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 645077935806486367, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7677484484946083636, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
       propertyPath: m_Name
@@ -1509,7 +1510,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7677484484946083636, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8819256922348106597, guid: 28356974c7337f046a4d87eaf2777d62, type: 3}
       propertyPath: m_RootOrder
@@ -2098,10 +2099,6 @@ PrefabInstance:
       propertyPath: master
       value: 
       objectReference: {fileID: 141332428}
-    - target: {fileID: 3453479146794638708, guid: 914c633a740d5794d836c4af20621c69, type: 3}
-      propertyPath: m_PreserveTreePrototypeLayers
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3453479147583287944, guid: 914c633a740d5794d836c4af20621c69, type: 3}
       propertyPath: m_RootOrder
       value: 8

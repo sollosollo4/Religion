@@ -35,7 +35,8 @@ public enum ClientPackets
     playerShoot,
     playerThrowItem,
     chatMessage,
-    playerTryConnection
+    playerTryConnection,
+    characterNew
 }
 
 public class Packet : IDisposable
@@ -195,14 +196,6 @@ public class Packet : IDisposable
         Write(_value.y);
         Write(_value.z);
         Write(_value.w);
-    }
-
-    public void Write(List<Character> characters)
-    {
-        foreach(Character chr in characters)
-        {
-            chr.WriteData(this);
-        }
     }
     #endregion
 

@@ -47,7 +47,7 @@ public class ChatCommand : ServerSend
             foreach(string param in _params)
                 _packet.Write(param);
 
-            SendUDPDataToAll(_packet);
+            SendTCPDataToAll(_packet);
         }
     }
 
@@ -60,7 +60,7 @@ public class ChatCommand : ServerSend
             foreach (string param in _params)
                 _packet.Write(param);
 
-            SendUDPDataToAll(_packet);
+            SendTCPDataToAll(_packet);
         }
     }
 
@@ -73,7 +73,7 @@ public class ChatCommand : ServerSend
             foreach (string param in _params)
                 _packet.Write(param);
 
-            SendUDPDataToAll(_packet);
+            SendTCPDataToAll(_packet);
         }
     }
     #endregion

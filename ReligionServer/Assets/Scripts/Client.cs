@@ -13,12 +13,14 @@ public class Client
     public Player player;
     public TCP tcp;
     public UDP udp;
+    public Dictionary<int, Character> playerCharacters;
 
     public Client(int _clientId)
     {
         id = _clientId;
         tcp = new TCP(id);
         udp = new UDP(id);
+        playerCharacters = new Dictionary<int, Character>();
     }
 
     public class TCP
@@ -49,8 +51,6 @@ public class Client
             receiveBuffer = new byte[dataBufferSize];
 
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
-
-            ServerSend.Welcome(id, "Welcome to the server!");
         }
 
         /// <summary>Sends data to the client via TCP.</summary>
@@ -159,6 +159,18 @@ public class Client
         }
     }
 
+    public void getCharacters()
+    {
+        playerCharacters.Add(0, new Character() { 
+            CharacterName = "TEST_NAME", 
+            CharacterClass = new CharacterClass() { 
+                CharacterClassCode = "000",
+                CharacterClassDescription = "test description",
+                CharacterClassName = "Warrior"
+            } 
+        });
+    }
+
     public class UDP
     {
         public IPEndPoint endPoint;
@@ -249,12 +261,13 @@ public class Client
 
     public void AuthConnection(int _playerId, bool _isSuccess)
     {
-        string _message = $"Подключено прошло {(_isSuccess ? "успешно" : "с ошибкой")}";
-        ServerSend.PlayerTryConnection(_playerId, _isSuccess, _message);
+        string _message = $"Connection {(_isSuccess ? "successfull" : "failure")}";
+       
+        ServerSend.PlayerTryConnection(_playerId, _isSuccess, _message, playerCharacters);
     }
 
     /// <summary>Disconnects the client and stops all network traffic.</summary>
-    private void Disconnect()
+    public void Disconnect()
     {
         Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 

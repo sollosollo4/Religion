@@ -44,7 +44,7 @@ public class ChatManager : MonoBehaviour
             return;
         }
         
-        if(ChatManager.ForbiddenWords.Contains(_message))
+        if(ForbiddenWords.Contains(_message))
         {
             string []_params = new string[1] { Array.IndexOf(ForbiddenWords, _message).ToString() };
             instance.CommandInstance.ExecuteCommand("ForbiddenError", _params);

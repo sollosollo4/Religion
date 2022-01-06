@@ -29,9 +29,10 @@ public class Authorization : MonoBehaviour
 
     public void TryConnectToServer()
     {
-        Client.instance.ConnectToServer();
+        if(!Client.instance.isValid())
+            Client.instance.ConnectToServer();
 
-        StartCoroutine(ExecuteAfterTime(5));
+        StartCoroutine(ExecuteAfterTime(1));
     }
     IEnumerator ExecuteAfterTime(float time)
     {
@@ -55,7 +56,7 @@ public class Authorization : MonoBehaviour
     public void ShowErrorForm(string _message)
     {
         errorForm.SetActive(true);
-        errorForm.GetComponent<Text>().text = _message;
+        errorForm.GetComponentInChildren<Text>().text = _message;
     }
 
     public void CloseErrorForm()
