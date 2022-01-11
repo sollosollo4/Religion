@@ -55,7 +55,7 @@ public class ServerHandle
         string _login = _packet.ReadString();
         string _password = _packet.ReadString();
 
-        if(AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password))
+        if(AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password, _fromClient))
             Server.clients[_fromClient].AuthConnection(_fromClient, true);
         else
             Server.clients[_fromClient].AuthConnection(_fromClient, false);

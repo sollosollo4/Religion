@@ -27,15 +27,18 @@ namespace Assets.Database
 
             MySqlCommand command = new MySqlCommand("INSERT server_logs(logText) VALUES('Successfull contected from server')", connection);
             command.ExecuteReader();
+            connection.Close();
 
             setupControllers();
-            connection.Close();
         }
 
         private void setupControllers()
         {
-            Controllers = new Dictionary<string, Controller>();
-            Controllers.Add("AccountController", new AccountController(connection));
+            Controllers = new Dictionary<string, Controller>
+            {
+                { "AccountController", new AccountController(connection) },
+                { "CharacterController", new Controllers.CharacterController(connection) },
+            };
         }
 
         public void MySqlCloseConnection()
@@ -50,7 +53,12 @@ namespace Assets.Database
         public Controller getController<Controller>()
         {
             Type typeParamtrType = typeof(Controller);
-            return (Controller)Controllers[typeParamtrType.Name];
+            if(Controllers.ContainsKey(typeParamtrType.Name))
+                return (Controller)Controllers[typeParamtrType.Name];
+            else
+            {
+                throw new Exception("MYSQL: Error get controller with name: "+ typeParamtrType.Name);
+            }
         }
     }
 }

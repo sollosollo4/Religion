@@ -8,6 +8,6 @@ namespace Assets.Database
 {
     interface Controller
     {
-
+        IDbModel DbModel { get; }
     }
 }

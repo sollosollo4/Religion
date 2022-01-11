@@ -50,6 +50,7 @@ public class Authorization : MonoBehaviour
         else
         {
             ShowErrorForm(_message);
+            Client.instance.Disconnect();
         }
     }
 

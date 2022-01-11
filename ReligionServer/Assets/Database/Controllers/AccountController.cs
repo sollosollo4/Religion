@@ -15,6 +15,8 @@ namespace Assets.Database.Controllers
         private MySqlConnection connection;
         accounts AccountsModel;
 
+        public IDbModel DbModel => AccountsModel;
+
         public AccountController(MySqlConnection connection)
         {
             this.connection = connection;
@@ -24,30 +26,27 @@ namespace Assets.Database.Controllers
 
         public bool checkUserPasswordHash(string userName, string password)
         {
-            string query = AccountsModel.getRowsByFields(new string[] {"accountPassword", "accountSalt"}, new Dictionary<string, string> { {"accountLogin", userName} });
+            string query = AccountsModel.getAllRowsByFields(new Dictionary<string, string> { {"accountLogin", userName} });
             connection.Open();
-            Debug.Log(query);
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            using MySqlDataReader reader = cmd.ExecuteReader();
+            AccountsModel = (accounts)AccountsModel.GetModel(reader).First();
+            
+            connection.Close();
+            return AreEqual(password, AccountsModel.accountPassword, AccountsModel.accountSalt);
+        }
+
+        public int getAccountId(string username)
+        {
+            string query = AccountsModel.getAllRowsByFields(new Dictionary<string, string> { { "accountLogin", username } });
+            connection.Open();
             MySqlCommand cmd = new MySqlCommand(query, connection);
             MySqlDataReader reader = cmd.ExecuteReader();
-            Debug.Log("Yes. We sure this"+ reader.HasRows);
-            if (reader.HasRows)
-            {
-                int count = reader.FieldCount;
-                string[] passwords = new string[count];
-                while (reader.Read())
-                {
-                    for (var i = 0; i < count; i++)
-                    {
-                        passwords[i] = reader.GetValue(i).ToString();
-                    }
-                }
-                reader.Close();
+            AccountsModel.GetModel(reader);
 
-                return AreEqual(password, passwords[0], passwords[1]);
-            }
             connection.Close();
 
-            return false;
+            return AccountsModel.id;
         }
 
         static string CreateSalt(int size)

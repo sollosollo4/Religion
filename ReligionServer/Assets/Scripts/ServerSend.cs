@@ -283,14 +283,14 @@ public class ServerSend
         }
     }
 
-    public static void PlayerTryConnection(int _byPlayer, bool _success, string _message, Dictionary<int, Character> _characters)
+    public static void PlayerTryConnection(int _byPlayer, bool _success, string _message, List<Character> _characters)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerTryConnection))
         {
             _packet.Write(_success);
             _packet.Write(_message);
             _packet.Write(_byPlayer);
-            foreach(Character _clientCharacter in _characters.Values)
+            foreach(Character _clientCharacter in _characters)
             {
                 _packet.Write(_clientCharacter.CharacterName);
                 _packet.Write(_clientCharacter.CharacterClass.CharacterClassCode);

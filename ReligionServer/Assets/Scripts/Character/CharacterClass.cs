@@ -13,6 +13,9 @@ public class CharacterClass
 
     public Image CharacterClassIcon;
 
-
+    public static CharacterClass CreateClassByName(string characterClass)
+    {
+        return new CharacterClass();
+    }
 }
 

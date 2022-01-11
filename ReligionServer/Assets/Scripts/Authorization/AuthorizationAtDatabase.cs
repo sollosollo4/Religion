@@ -9,9 +9,17 @@ using Assets.Database.Controllers;
 
 public class AuthorizationAtDatabase
 {
-    public static bool CheckUserPasswordhash(string _username, string _password)
+    public static bool CheckUserPasswordhash(string _username, string _password, int _fromClient)
     {
-        return Server.mySqlConnection.getController<AccountController>().checkUserPasswordHash(_username, _password);
+        if (Server.mySqlConnection.getController<AccountController>().checkUserPasswordHash(_username, _password))
+        {
+            Server.clients[_fromClient].accountId = Server.mySqlConnection.getController<AccountController>().getAccountId(_username);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
 

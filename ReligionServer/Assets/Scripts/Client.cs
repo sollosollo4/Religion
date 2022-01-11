@@ -14,14 +14,15 @@ public class Client
     public Player player;
     public TCP tcp;
     public UDP udp;
-    public Dictionary<int, Character> playerCharacters;
+    public List<Character> playerCharacters;
+    public int accountId;
 
     public Client(int _clientId)
     {
         id = _clientId;
         tcp = new TCP(id);
         udp = new UDP(id);
-        playerCharacters = new Dictionary<int, Character>();
+        playerCharacters = new List<Character>();
     }
 
     public class TCP
@@ -160,16 +161,9 @@ public class Client
         }
     }
 
-    public void getCharacters()
+    public void  getCharacters()
     {
-        playerCharacters.Add(0, new Character() { 
-            CharacterName = "TEST_NAME", 
-            CharacterClass = new CharacterClass() { 
-                CharacterClassCode = "000",
-                CharacterClassDescription = "test description",
-                CharacterClassName = "Warrior"
-            } 
-        });
+        playerCharacters = Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterController>().getCharacterList(accountId);
     }
 
     public class UDP

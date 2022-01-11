@@ -127,7 +127,6 @@ public class Server
         for (int i = 1; i <= MaxPlayers; i++)
         {
             clients.Add(i, new Client(i));
-            clients[i].getCharacters();
         }
 
         packetHandlers = new Dictionary<int, PacketHandler>()
