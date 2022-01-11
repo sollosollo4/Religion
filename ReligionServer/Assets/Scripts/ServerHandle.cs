@@ -55,14 +55,10 @@ public class ServerHandle
         string _login = _packet.ReadString();
         string _password = _packet.ReadString();
 
-        if(_login == "123" && _password == "123")
-        {
+        if(AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password))
             Server.clients[_fromClient].AuthConnection(_fromClient, true);
-        }
         else
-        {
             Server.clients[_fromClient].AuthConnection(_fromClient, false);
-        }
     }
 
     internal static void CharacterNew(int _fromClient, Packet _packet)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Database;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
@@ -12,6 +13,7 @@ public class Server
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public delegate void PacketHandler(int _fromClient, Packet _packet);
     public static Dictionary<int, PacketHandler> packetHandlers;
+    public static MySqlConnectionClass mySqlConnection;
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
@@ -35,6 +37,8 @@ public class Server
         udpListener.BeginReceive(UDPReceiveCallback, null);
 
         Debug.Log($"Server started on port {Port}.");
+
+        mySqlConnection = new MySqlConnectionClass();
     }
 
     /// <summary>Handles new TCP connections.</summary>
@@ -144,5 +148,6 @@ public class Server
     {
         tcpListener.Stop();
         udpListener.Close();
+        mySqlConnection.MySqlCloseConnection();
     }
 }
