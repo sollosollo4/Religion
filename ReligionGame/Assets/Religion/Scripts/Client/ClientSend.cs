@@ -36,16 +36,17 @@ public class ClientSend : MonoBehaviour
 
     /// <summary>Sends player input to the server.</summary>
     /// <param name="_inputs"></param>
-    public static void PlayerMovement(bool[] _inputs)
+    public static void PlayerMovement(Dictionary<string, bool> _inputs)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
         {
-            _packet.Write(_inputs.Length);
-            foreach (bool _input in _inputs)
+            _packet.Write(_inputs.Count);
+            foreach (var _input in _inputs)
             {
-                _packet.Write(_input);
+                _packet.Write(_input.Value);
             }
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
+            _packet.Write(GameManager.players[Client.instance.myId].animationState);
 
             SendUDPData(_packet);
         }
@@ -78,6 +79,16 @@ public class ClientSend : MonoBehaviour
             _packet.Write(_message);
 
             SendTCPData(_packet);
+        }
+    }
+    
+    public static void PlayerAnimation(int animationState)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.animationState))
+        {
+            _packet.Write(GameManager.players[Client.instance.myId].animationState);
+
+            SendUDPData(_packet);
         }
     }
     #endregion

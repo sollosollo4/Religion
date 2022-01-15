@@ -21,6 +21,20 @@ namespace Assets.Database.Controllers
             CharactersModel.createModel(connection);
         }
 
+        public void createNewCharacter(Character character)
+        {
+            string query = CharactersModel.insertRow(new Dictionary<string, object>()
+            {
+                { "characterName", character.CharacterName },
+                { "characterClass", character.CharacterClass.CharacterClassCode },
+                { "accountId", character.AccountId }
+            });
+            connection.Open();
+            MySqlCommand cmd = new MySqlCommand(query, connection);
+            cmd.ExecuteReader();
+            connection.Close();
+        }
+
         public List<Character> getCharacterList(int accountId)
         {
             string query = CharactersModel.getAllRowsByFields(new Dictionary<string, string> { { "accountId", accountId.ToString() } });
@@ -33,7 +47,8 @@ namespace Assets.Database.Controllers
                 characters.Add(new Character()
                 {
                     CharacterName = character.characterName,
-                    CharacterClass = CharacterClass.CreateClassByName(character.characterClass)
+                    CharacterClass = CharacterClass.CreateClassByName(character.characterClass),
+                    AccountId = accountId
                 });
             }
             connection.Close();

@@ -19,8 +19,24 @@ public class ClientAuthHandle
 
         // Now that we have the client's id, connect UDP
         Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
+        
+        int charactersCount = _packet.ReadInt();
+        for(int i=0; i > charactersCount; i++)
+        {
+            Character newChar = new Character()
+            {
+                CharacterName = _packet.ReadString(),
+                CharacterClass = CharacterClass.CreateClassByName(_packet.ReadString())
+            };
+            Debug.Log(newChar.CharacterName + " --> " + newChar.CharacterClass.CharacterClassName);
+        }
 
-        Authorization.instance.ConnectToServer(_isConnected, _message);
+        Authorization.instance.LoadCreateNewCharacterScene(_isConnected, _message);
+    }
+
+    internal static void CreateNewCharacter(Packet _packet)
+    {
+        throw new NotImplementedException();
     }
 }
 

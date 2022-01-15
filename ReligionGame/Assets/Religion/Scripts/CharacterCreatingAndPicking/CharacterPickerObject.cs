@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class CharacterPickerObject : MonoBehaviour
 {
-    public string CharacterName;
-    public string CharacterClassName;
-    public string CharacterLastLocationName;
+    public Text CharacterName;
+    public Text CharacterClassName;
+    public Text CharacterLastLocationName;
 
     public Button characterPicked;
 
     public CharacterPickerObject(string _name, string _classname, string _last_location)
     {
-        CharacterName = _name;
-        CharacterClassName = _classname;
-        CharacterLastLocationName = _last_location;
+        CharacterName.text = _name;
+        CharacterClassName.text = _classname;
+        CharacterLastLocationName.text = _last_location;
     }
 }

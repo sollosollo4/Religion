@@ -109,6 +109,7 @@ public class Client : MonoBehaviour
             catch (Exception _ex)
             {
                 Debug.Log($"Error sending data to server via TCP: {_ex}");
+                Disconnect();
             }
         }
 
@@ -318,7 +319,9 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.enemyPosition, ClientHandle.EnemyPosition },
             { (int)ServerPackets.enemyHealth, ClientHandle.EnemyHealth },
             { (int)ServerPackets.chatMessage, ClientHandle.CreateChatMessage },
-            { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection }
+            { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection },
+            { (int)ServerPackets.playerCreateNewCharacter, ClientAuthHandle.CreateNewCharacter },
+            { (int)ServerPackets.playerState, ClientHandle.PlayerState }
         };
         Debug.Log("Initialized packets.");
     }
@@ -330,6 +333,7 @@ public class Client : MonoBehaviour
         {
             isConnected = false;
             tcp.socket.Close();
+            if(udp.socket != null)
             udp.socket.Close();
 
             Debug.Log("Disconnected from server.");

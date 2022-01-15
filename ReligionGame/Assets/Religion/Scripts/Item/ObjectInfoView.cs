@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 [ExecuteInEditMode]
 public class ObjectInfoView : MonoBehaviour
 {
-	public string text = "<b>Укажите</b> <color=#ffea00>имя</color> объекта";
+	public string text = "<b>Type</b> <color=#ffea00>name</color> object";
 	public int textSize = 14;
 	public Font textFont;
 	public Color textColor = Color.white;

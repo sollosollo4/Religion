@@ -14,8 +14,6 @@ public class UIManager : MonoBehaviour
     public GameObject startMenu;
     public InputField usernameField;
 
-    public CharacterPickerObject pickedCharacter;
-
     private void Awake()
     {
         if (instance == null)
@@ -27,11 +25,5 @@ public class UIManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
-    }
-
-    public void ConnectToServer()
-    {
-        ClientSend.WelcomeReceived();
-        SceneManager.LoadScene("Main");
     }
 }

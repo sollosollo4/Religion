@@ -22,22 +22,26 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(!ChatManager.isPlayerTypingMessage)
-         SendInputToServer();
+        if (!ChatManager.isPlayerTypingMessage)
+        {
+            SendInputToServer();
+        }
     }
 
     /// <summary>Sends player input to the server.</summary>
     private void SendInputToServer()
     {
-        bool[] _inputs = new bool[]
+        Dictionary<string, bool> _inputsAnimation = new Dictionary<string, bool>()
         {
-            Input.GetKey(KeyCode.W),
-            Input.GetKey(KeyCode.S),
-            Input.GetKey(KeyCode.A),
-            Input.GetKey(KeyCode.D),
-            Input.GetKey(KeyCode.Space)
+            { "Forward", Input.GetKey(KeyCode.W) },
+            { "Backward", Input.GetKey(KeyCode.S) },
+            { "Left", Input.GetKey(KeyCode.A) },
+            { "Right", Input.GetKey(KeyCode.D) },
+            { "Jump", Input.GetKey(KeyCode.Space) }
         };
 
-        ClientSend.PlayerMovement(_inputs);
+        GameManager.players[Client.instance.myId].SetPlayerStateAnimation(_inputsAnimation);
+
+        ClientSend.PlayerMovement(_inputsAnimation);
     }
 }

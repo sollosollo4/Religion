@@ -160,5 +160,17 @@ public class ClientHandle : MonoBehaviour
         string _message = _packet.ReadString();
 
         ChatManager.instance.CreateChatMessage(_userId, _message);
-    } 
+    }
+
+    public static void PlayerState(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        int state = _packet.ReadInt();
+
+        if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
+        {
+            Debug.Log($"Set State from other player{state}");
+            _playerManager.SetState(state);
+        }
+    }
 }
