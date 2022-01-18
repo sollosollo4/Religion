@@ -10,7 +10,7 @@ public class CreateNewCharacterUIManager : MonoBehaviour
 {
     public static CreateNewCharacterUIManager instance;
 
-    public GameObject pickedCharacterPrefab;
+    public CreateNewCharacterUI pickedCharacterPrefab;
 
     private void Awake()
     {
@@ -31,9 +31,11 @@ public class CreateNewCharacterUIManager : MonoBehaviour
         SceneManager.LoadScene("Main");
     }
 
-    public void RotateHero()
+    public void CreateNew()
     {
-
+        gameObject.SetActive(false);
+        pickedCharacterPrefab.gameObject.SetActive(true);
+        pickedCharacterPrefab.PickWarrior();
     }
 }
 

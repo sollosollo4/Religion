@@ -48,14 +48,14 @@ namespace Assets.Database
 
             foreach(var field in flds)
             {
-                queryText += $"{field.Key}" + field == flds.Keys.Last() ? ")" : ", ";
+                queryText += $"{field.Key}" + (field.Key == flds.Keys.Last() ? ")" : ", ");
             }
 
             queryText += " VALUES (";
 
             foreach (var field in flds)
             {
-                queryText += $"'{field.Value}'" + field.ToString() == flds.Values.Last().ToString() ? ")" : ", ";
+                queryText += $"'{field.Value}'" + (field.Value.ToString() == flds.Values.Last().ToString() ? ")" : ", ");
             }
 
             return queryText + ";";

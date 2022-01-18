@@ -91,5 +91,16 @@ public class ClientSend : MonoBehaviour
             SendUDPData(_packet);
         }
     }
+
+    public static void CreateNewCharater(string _characterName, string _className)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.createNewCharacter))
+        {
+            _packet.Write(_characterName);
+            _packet.Write(_className);
+
+            SendTCPData(_packet);
+        }
+    }
     #endregion
 }

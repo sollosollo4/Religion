@@ -33,10 +33,5 @@ public class ClientAuthHandle
 
         Authorization.instance.LoadCreateNewCharacterScene(_isConnected, _message);
     }
-
-    internal static void CreateNewCharacter(Packet _packet)
-    {
-        throw new NotImplementedException();
-    }
 }
 

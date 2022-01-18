@@ -161,7 +161,7 @@ public class Client
         }
     }
 
-    public void  getCharacters()
+    public void getCharacters()
     {
         playerCharacters = Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterController>().getCharacterList(accountId);
     }

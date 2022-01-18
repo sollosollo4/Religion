@@ -38,7 +38,8 @@ public enum ClientPackets
     playerThrowItem,
     chatMessage,
     tryConnection,
-    animationState
+    createNewCharacter,
+    animationState,
 }
 
 public class Packet : IDisposable

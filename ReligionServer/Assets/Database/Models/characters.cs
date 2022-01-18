@@ -31,12 +31,11 @@ namespace Assets.Database.Models
                     characterName = reader.GetString(1);
                     characterClass = reader.GetString(2);
                     accountId = reader.GetInt32(3);
-                }
-                reader.Close();
-                yield return this;
-            }
 
-            yield return null;
+                    yield return this;
+                }
+            }
+            reader.Close();
         }
     }
 }

@@ -161,16 +161,33 @@ public class ClientHandle : MonoBehaviour
 
         ChatManager.instance.CreateChatMessage(_userId, _message);
     }
+    public static void CreateNewCharacter(Packet _packet)
+    {
+        if (_packet.ReadBool())
+        {
+            string _characterName = _packet.ReadString();
+            string _characterClassName = _packet.ReadString();
+            CreateNewCharacterUI.CloseCreateFormAndAddNewCharacterToList(new CharacterPickerObject(_characterName, _characterClassName, ""));
+        }
+        else
+        {
+            string _error = _packet.ReadString();
+            string _characterName = _packet.ReadString();
+            string _characterClassName = _packet.ReadString();
+
+            CreateNewCharacterUI.instance.ErrorForm(_error);
+        }
+    }
 
     public static void PlayerState(Packet _packet)
     {
         int _id = _packet.ReadInt();
-        int state = _packet.ReadInt();
+        int _state = _packet.ReadInt();
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
         {
-            Debug.Log($"Set State from other player{state}");
-            _playerManager.SetState(state);
+            Debug.Log($"Set State from other player{_state}");
+            _playerManager.SetState(_state);
         }
     }
 }

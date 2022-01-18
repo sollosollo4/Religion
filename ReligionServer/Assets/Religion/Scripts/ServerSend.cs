@@ -314,11 +314,12 @@ public class ServerSend
         }
     }
 
-    public static void CreateNewCharacter(int _byPlayer, Character newChar)
+    public static void CreateNewCharacter(int _byPlayer, Character newChar, bool isCreated)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerCreateNewCharacter))
         {
-            _packet.Write(_byPlayer);
+            _packet.Write(isCreated);
+            if (!isCreated) _packet.Write("Current name already is use. Pleae set different name.");
             _packet.Write(newChar.CharacterName);
             _packet.Write(newChar.CharacterClass.CharacterClassCode);
 

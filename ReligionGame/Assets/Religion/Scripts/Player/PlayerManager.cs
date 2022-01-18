@@ -13,7 +13,6 @@ public class PlayerManager : MonoBehaviour
     public int itemCount = 0;
     public int animationState = 0;
     public SkinnedMeshRenderer model;
-    public GameObject objectViewInfo;
     public Animator animator;
 
     public void Initialize(int _id, string _username)
@@ -30,7 +29,7 @@ public class PlayerManager : MonoBehaviour
     public void SetPlayerInfoView()
     {
         if (id != Client.instance.myId) { 
-            objectViewInfo.GetComponent<ObjectInfoView>().text = username;
+            //GetComponent<ObjectInfoView>().text = username;
         }
     }
 

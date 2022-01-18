@@ -11,9 +11,9 @@ public class Character
     public CharacterClass CharacterClass;
     public int AccountId;
 
-    public static void CreateNewCharacter(Character newChar)
+    public static bool CreateNewCharacter(Character newChar)
     {
-        Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterController>().createNewCharacter(newChar);
+        return Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterController>().createNewCharacter(newChar);
     }
 }
 

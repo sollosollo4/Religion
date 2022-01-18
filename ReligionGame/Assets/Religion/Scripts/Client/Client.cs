@@ -320,7 +320,7 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.enemyHealth, ClientHandle.EnemyHealth },
             { (int)ServerPackets.chatMessage, ClientHandle.CreateChatMessage },
             { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection },
-            { (int)ServerPackets.playerCreateNewCharacter, ClientAuthHandle.CreateNewCharacter },
+            { (int)ServerPackets.playerCreateNewCharacter, ClientHandle.CreateNewCharacter },
             { (int)ServerPackets.playerState, ClientHandle.PlayerState }
         };
         Debug.Log("Initialized packets.");

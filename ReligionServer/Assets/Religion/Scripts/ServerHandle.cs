@@ -57,10 +57,15 @@ public class ServerHandle
         string _login = _packet.ReadString();
         string _password = _packet.ReadString();
 
-        if(AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password, _fromClient))
+        if (AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password, _fromClient))
+        {
+            Server.clients[_fromClient].getCharacters();
             Server.clients[_fromClient].AuthConnection(_fromClient, true);
+        }
         else
+        {
             Server.clients[_fromClient].AuthConnection(_fromClient, false);
+        }
     }
 
     public static void CharacterNew(int _fromClient, Packet _packet)
@@ -69,18 +74,17 @@ public class ServerHandle
         string _className = _packet.ReadString();
         Character newChar = new Character()
         {
-            AccountId = Server.clients[_fromClient].accountId,
+            CharacterName = _name,
             CharacterClass = CharacterClass.CreateClassByName(_className),
-            CharacterName = _name
+            AccountId = Server.clients[_fromClient].accountId
         };
 
-        Character.CreateNewCharacter(newChar);
-
-        ServerSend.CreateNewCharacter(_fromClient, newChar);
+        bool isCreated = Character.CreateNewCharacter(newChar);
+        ServerSend.CreateNewCharacter(_fromClient, newChar, isCreated);
     }
 
-    internal static void AnimationState(int _fromClient, Packet _packet)
+    public static void AnimationState(int _fromClient, Packet _packet)
     {
-        throw new NotImplementedException();
+        Server.clients[_fromClient].player.animationState = _packet.ReadInt();
     }
 }
