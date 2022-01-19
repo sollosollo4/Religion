@@ -9407,7 +9407,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigOre1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 119014046250812762, guid: 30a3aec0219c9a149a0ddf021cdac142, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 30a3aec0219c9a149a0ddf021cdac142, type: 3}
 --- !u!4 &7867589640973256724 stripped
 Transform:

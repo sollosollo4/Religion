@@ -38,6 +38,7 @@ namespace Assets.Database
             {
                 { "AccountController", new AccountController(connection) },
                 { "CharacterController", new Controllers.CharacterController(connection) },
+                { "StructureController", new StructureController(connection) },
             };
         }
 

@@ -55,7 +55,7 @@ namespace Assets.Database
 
             foreach (var field in flds)
             {
-                queryText += $"'{field.Value}'" + (field.Value.ToString() == flds.Values.Last().ToString() ? ")" : ", ");
+                queryText += $"'{field.Value}'" + (field.Key == flds.Keys.Last() ? ")" : ", ");
             }
 
             return queryText + ";";
@@ -110,6 +110,15 @@ namespace Assets.Database
             queryText += limit_c;
 
             return queryText + ";";
+        }
+        public virtual string deleteAllRows()
+        {
+            return "";
+        }
+
+        public virtual string deleteRowsByFields()
+        {
+            return "";
         }
     }
 }

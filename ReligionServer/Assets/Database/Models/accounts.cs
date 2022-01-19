@@ -32,10 +32,10 @@ namespace Assets.Database.Models
                     accountPassword = reader.GetString(2);
                     accountSalt = reader.GetString(3);
                 }
-                reader.Close();
+                
                 yield return this;
             }
-            yield return null;
+            reader.Close();
         }
     }
 }
