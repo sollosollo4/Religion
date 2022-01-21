@@ -23,7 +23,16 @@ public class PlayerManager : MonoBehaviour
 
         SetPlayerInfoView();
         ActiveChatPanel();
+        SetGlowEffectsObjects();
         animator.Play("Idle01");
+    }
+
+    private void SetGlowEffectsObjects()
+    {
+        foreach (var obj in GameManager.instance.scriptableObjectPrefab.GetComponentsInChildren<SpawnedGameObject>())
+        {
+            GlowController.RegisterObject(obj.GetComponent<GlowObjectCmd>());
+        }
     }
 
     public void SetPlayerInfoView()

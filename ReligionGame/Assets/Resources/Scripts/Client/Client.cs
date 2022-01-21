@@ -322,7 +322,8 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection },
             { (int)ServerPackets.playerCreateNewCharacter, ClientHandle.CreateNewCharacter },
             { (int)ServerPackets.playerState, ClientHandle.PlayerState },
-            { (int)ServerPackets.playerCanUseTool, ClientHandle.PlayerCanUseTool }
+            { (int)ServerPackets.playerCanUseTool, ClientHandle.PlayerCanUseTool },
+            { (int)ServerPackets.playerRemoveUseTool, ClientHandle.PlayerRemoveUseTool }
         };
         Debug.Log("Initialized packets.");
     }

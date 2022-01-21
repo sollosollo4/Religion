@@ -12,7 +12,7 @@ public class SpawnedGameObject : MonoBehaviour
     public ushort PrefabId;
     public ushort parentSpawnedObjectId;
     public string ParentPath;
-    public string type;
+    public string type;   
 
     private Dictionary<uint, SpawnedGameObject> parentObjects;
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6597981056226668525}
   - component: {fileID: 5742151545820233704}
   - component: {fileID: 120078460399096097}
+  - component: {fileID: 8902126363583066697}
   m_Layer: 0
   m_Name: BigOre1
   m_TagString: Untagged
@@ -105,6 +106,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2894e5965419444b35f24841c9cd2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnedObjectId: 0
+  PrefabId: 1
+  parentSpawnedObjectId: 0
+  ParentPath: 
+  type: 
 --- !u!65 &5742151545820233704
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -132,6 +138,23 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300038, guid: 5f3a7deba91ee3341b2266db1be8c0a0, type: 3}
+--- !u!114 &8902126363583066697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5375935930458705902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04dba0bf8b6bf73468147cfb855f643c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnedObjectId: 0
+  PrefabId: 0
+  parentSpawnedObjectId: 0
+  ParentPath: 
+  type: 
 --- !u!1001 &1192008480196588819
 PrefabInstance:
   m_ObjectHideFlags: 0

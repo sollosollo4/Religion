@@ -6,31 +6,33 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-[Serializable]
-public class StructuresPrefabsId : ScriptableObject
+public class StructuresPrefabsId : MonoBehaviour
 {
     public Dictionary<ushort, string> prefabIdToPath;
-
-    [MenuItem("Tools/MySql/Generate ids for prefabs")]
-    public static void GiveAllObjectsAUniqueID()
+    public void Loading()
     {
+        StartCoroutine(BuildPrefabPoolCoroutine());
+        LoadData();
 
         uint id = 0;
-
         SpawnedGameObject[] touchableObjects = FindObjectsOfType<SpawnedGameObject>();
         foreach (SpawnedGameObject obj in touchableObjects)
         {
             obj.SetId(id);
             id++;
+
+            EditorUtility.SetDirty(obj);
+            AssetDatabase.SaveAssets();
         }
 
         Server.mySqlConnection = new Assets.Database.MySqlConnectionClass();
         Server.mySqlConnection.getController<StructureController>().savePrefabs(touchableObjects);
-    }
 
-    public static IEnumerator BuildPrefabPoolCoroutine()
+        
+    }
+    public IEnumerator BuildPrefabPoolCoroutine()
     {
-        ushort _prefabId = 1;
+        var _prefabId = 1;
         var loadPath = $"{Application.dataPath}/Resources/SpawnablePrefabs";
         string[] spawnablePrefabs = Directory.GetFiles(loadPath, "*.prefab", SearchOption.AllDirectories);
         List<string> prefabData = new List<string>();
@@ -40,22 +42,15 @@ public class StructuresPrefabsId : ScriptableObject
             var path = prefabPath.Replace($"{Application.dataPath}/Resources/", "").Replace("\\", "/").Replace(".prefab", "");
             var spawnablePrefab = Resources.Load<GameObject>(path);
             if (spawnablePrefab == null) { Debug.LogError($"NO PREFAB AT PATH: {path}"); continue; }
-            Debug.Log($"Success load: {spawnablePrefab.name}");
             var spawnedObject = spawnablePrefab.GetComponent<SpawnedGameObject>();
             if (spawnedObject == null)
             {
-                Debug.LogError($"{spawnablePrefab} is missing a SpawnedGameObject. Intentional?");
+                Debug.LogError($"{spawnablePrefab} ithe buis missing a SpawnedGameObject. Intentional?");
                 continue;
-            }
-
-            if (spawnedObject.PrefabId != _prefabId)
-            {
-                spawnedObject.PrefabId = _prefabId;
             }
 
             prefabData.Add($"{_prefabId}|{path}");
             _prefabId++;
-            
 
             var packetIndex = i / 500f;
             if ((packetIndex % 1) == 0)
@@ -82,7 +77,6 @@ public class StructuresPrefabsId : ScriptableObject
             prefabIdToPath.Add(prefabId, prefabPath);
         }
     }
-
     public void LoadData()
     {
         if (prefabIdToPath == null || prefabIdToPath.Count == 0) ImportData();

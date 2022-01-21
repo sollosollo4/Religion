@@ -32,8 +32,8 @@ public class Authorization : MonoBehaviour
 
         changeColorState = 0;
 
-        backGroundImage.color = new Color(0, 0, 255, 255);
-        StartCoroutine(changeColorBackround());
+        //backGroundImage.color = new Color(0, 0, 255, 255);
+        //StartCoroutine(changeColorBackround());
     }
 
     IEnumerator changeColorBackround()

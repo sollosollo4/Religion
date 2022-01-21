@@ -27,7 +27,8 @@ public enum ServerPackets
     tryConnection,
     playerCreateNewCharacter,
     playerState,
-    playerCanUseTool
+    playerCanUseTool,
+    playerRemoveUseTool
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -307,6 +308,27 @@ public class Packet : IDisposable
         else
         {
             throw new Exception("Could not read value of type 'long'!");
+        }
+    }
+
+    /// <summary>Reads a uint from the packet.</summary>
+    /// <param name="_moveReadPos">Whether or not to move the buffer's read position.</param>
+    public uint ReadUint(bool _moveReadPos = true)
+    {
+        if (buffer.Count > readPos)
+        {
+            // If there are unread bytes
+            uint _value = BitConverter.ToUInt32(readableBuffer, readPos); // Convert the bytes to a long
+            if (_moveReadPos)
+            {
+                // If _moveReadPos is true
+                readPos += 4; // Increase readPos by 8
+            }
+            return _value; // Return the long
+        }
+        else
+        {
+            throw new Exception("Could not read value of type 'uint'!");
         }
     }
 

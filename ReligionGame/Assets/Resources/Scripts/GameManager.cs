@@ -10,12 +10,14 @@ public class GameManager : MonoBehaviour
     public static Dictionary<int, ItemSpawner> itemSpawners = new Dictionary<int, ItemSpawner>();
     public static Dictionary<int, ProjectileManager> projectiles = new Dictionary<int, ProjectileManager>();
     public static Dictionary<int, EnemyManager> enemies = new Dictionary<int, EnemyManager>();
+    public static Dictionary<uint, SpawnedGameObject> spawnables = new Dictionary<uint, SpawnedGameObject>();
 
     public GameObject localPlayerPrefab;
     public GameObject playerPrefab;
     public GameObject itemSpawnerPrefab;
     public GameObject projectilePrefab;
     public GameObject enemyPrefab;
+    public GameObject scriptableObjectPrefab;
 
     private void Awake()
     {
@@ -27,6 +29,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
+        }
+
+        foreach(var obj in scriptableObjectPrefab.GetComponentsInChildren<SpawnedGameObject>())
+        {
+            spawnables.Add(obj.spawnedObjectId, obj);
         }
     }
 

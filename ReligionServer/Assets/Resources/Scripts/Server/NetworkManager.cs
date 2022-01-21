@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
@@ -29,11 +30,7 @@ public class NetworkManager : MonoBehaviour
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
 
-        Server.Start(5, 26950);
-
-        if (FindObjectsOfType<SpawnedGameObject>().Length != Server.spawnedGameObjects.Count())
-            Debug.LogError("Structure data is incorrectly entered in the database. Possible errors on the client side");
-        Debug.Log($"SpawnedGameObjects loaded success. All: {Server.spawnedGameObjects.Count()}");
+        Server.Start(2, 26950);
     }
 
     private void OnApplicationQuit()

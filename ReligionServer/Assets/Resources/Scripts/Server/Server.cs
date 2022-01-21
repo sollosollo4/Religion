@@ -13,7 +13,7 @@ public class Server
     public static Dictionary<int, Client> clients = new Dictionary<int, Client>();
     public delegate void PacketHandler(int _fromClient, Packet _packet);
     public static Dictionary<int, PacketHandler> packetHandlers;
-    public static Dictionary<uint, SpawnedGameObject> spawnedGameObjects;
+    //public static Dictionary<uint, SpawnedGameObject> spawnedGameObjects;
     public static MySqlConnectionClass mySqlConnection;
 
     private static TcpListener tcpListener;
@@ -37,14 +37,13 @@ public class Server
         udpListener = new UdpClient(Port);
         udpListener.BeginReceive(UDPReceiveCallback, null);
 
-        spawnedGameObjects = new Dictionary<uint, SpawnedGameObject>();
+        //spawnedGameObjects = new Dictionary<uint, SpawnedGameObject>();
 
         Debug.Log($"Server started on port {Port}.");
 
         mySqlConnection = new MySqlConnectionClass();
 
-        spawnedGameObjects = mySqlConnection.getController<Assets.Database.Controllers.StructureController>().loadPrefabs();
-        
+        //spawnedGameObjects = mySqlConnection.getController<Assets.Database.Controllers.StructureController>().loadPrefabs();
     }
 
     /// <summary>Handles new TCP connections.</summary>

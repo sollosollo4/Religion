@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 namespace Assets.Database.Controllers
@@ -34,7 +35,7 @@ namespace Assets.Database.Controllers
             {
                 foreach (structures model in StructuresModel.GetModel(reader))
                 {
-                    var prefab = Resources.Load<GameObject>($"SpawnablePrefabs/{model.structuresPrefabName}");
+                    var prefab = Resources.Load<GameObject>(model.structuresPrefabName);
                     SpawnedGameObject spawnedGameObject = prefab.GetComponent<SpawnedGameObject>();
                     getPrefabs.Add(model.id, spawnedGameObject);
                 }
@@ -57,7 +58,7 @@ namespace Assets.Database.Controllers
                 {
                     { "id", touch.spawnedObjectId.ToString("G", CultureInfo.InvariantCulture) },
                     { "structuresPrefabId", touch.PrefabId.ToString("G", CultureInfo.InvariantCulture) },
-                    { "structuresPrefabName", touch.name },
+                    { "structuresPrefabName", touch.gameObject.name },
 
                     { "structuresPositionX", touch.gameObject.transform.position.x.ToString("G", CultureInfo.InvariantCulture) },
                     { "structuresPositionY", touch.gameObject.transform.position.y.ToString("G", CultureInfo.InvariantCulture) },
@@ -67,7 +68,6 @@ namespace Assets.Database.Controllers
                     { "structuresRotationY", touch.gameObject.transform.position.y.ToString("G", CultureInfo.InvariantCulture) },
                     { "structuresRotationZ", touch.gameObject.transform.position.z.ToString("G", CultureInfo.InvariantCulture) },
                 });
-                Debug.Log(query);
 
                 MySqlCommand addCmd = new MySqlCommand(query, connection);
                 MySqlDataReader addReader = addCmd.ExecuteReader();

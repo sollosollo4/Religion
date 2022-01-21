@@ -11,8 +11,11 @@ GameObject:
   - component: {fileID: 5373719737665593350}
   - component: {fileID: 5398257431715621008}
   - component: {fileID: 5390697637026917708}
-  - component: {fileID: 119014046250812762}
+  - component: {fileID: 6597981056226668525}
   - component: {fileID: 5742151545820233704}
+  - component: {fileID: 120078460399096097}
+  - component: {fileID: 7789496778163959295}
+  - component: {fileID: 2764305920296754312}
   m_Layer: 0
   m_Name: BigOre1
   m_TagString: Untagged
@@ -92,7 +95,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &119014046250812762
+--- !u!114 &6597981056226668525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5375935930458705902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a2894e5965419444b35f24841c9cd2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnedObjectId: 0
+  PrefabId: 1
+  parentSpawnedObjectId: 0
+  ParentPath: 
+  type: 
+--- !u!65 &5742151545820233704
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5375935930458705902}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8.831795, y: 7.595126, z: 8.664724}
+  m_Center: {x: -0.120661505, y: 2.011005, z: -0.14653134}
+--- !u!64 &120078460399096097
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5375935930458705902}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300038, guid: 5f3a7deba91ee3341b2266db1be8c0a0, type: 3}
+--- !u!114 &7789496778163959295
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,22 +151,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e566afb9cbefbb458c55c0024fef7e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TouchEventName: Mining01
+  TouchEventName: Pickaxe
   TouchMotion: {fileID: 7400000, guid: b1c4a57ece73d404f9aebbd969b9be3a, type: 3}
   TouchTool: {fileID: 936127779546462689, guid: 366fbc89c0e7e6a45ab0dbeb764405d1, type: 3}
---- !u!65 &5742151545820233704
-BoxCollider:
+  NormalMaterial: {fileID: 0}
+  HightLightMaterial: {fileID: 0}
+--- !u!114 &2764305920296754312
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5375935930458705902}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 8.831795, y: 7.595126, z: 8.664724}
-  m_Center: {x: -0.120661505, y: 2.011005, z: -0.14653134}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd8943741930ae4bb2c1c3cd25bfffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0.023584902, g: 0.5282064, b: 1, a: 0}
+  LerpFactor: 10
 --- !u!1001 &1192008480196588819
 PrefabInstance:
   m_ObjectHideFlags: 0

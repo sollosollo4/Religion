@@ -74,20 +74,6 @@ public class ServerSend
     }
 
     #region Packets
-    /// <summary>Sends a welcome message to the given client.</summary>
-    /// <param name="_toClient">The client to send the packet to.</param>
-    /// <param name="_msg">The message to send.</param>
-    /*public static void Welcome(int _toClient, string _msg, List<Character> characters)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.welcome))
-        {
-            _packet.Write(_msg);
-            _packet.Write(_toClient);
-            _packet.Write(characters);
-
-            SendTCPData(_toClient, _packet);
-        }
-    }*/
 
     /// <summary>Tells a client to spawn a player.</summary>
     /// <param name="_toClient">The client that should spawn the player.</param>
@@ -264,7 +250,7 @@ public class ServerSend
 
     internal static void SpawnStructure(object id, SpawnedGameObject spGameObj)
     {
-        throw new NotImplementedException();
+        
     }
 
     public static void EnemyPosition(Enemy _enemy)
@@ -332,9 +318,18 @@ public class ServerSend
         }
     }
 
-    public static void PlayerCanUseTool(int _byPlayer, int _instanceOjbject)
+    public static void PlayerCanUseTool(int _byPlayer, uint _instanceOjbject)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerCanUseTool))
+        {
+            _packet.Write(_instanceOjbject);
+            SendTCPData(_byPlayer, _packet);
+        }
+    }
+
+    public static void PlayerRemoveUseTool(int _byPlayer, uint _instanceOjbject)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerRemoveUseTool))
         {
             _packet.Write(_instanceOjbject);
             SendTCPData(_byPlayer, _packet);

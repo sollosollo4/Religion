@@ -252,17 +252,6 @@ public class Client
         {
             ServerSend.SpawnEnemy(id, _enemy);
         }
-
-        List<SpawnedGameObject> tenObjects = new List<SpawnedGameObject>();
-        foreach (SpawnedGameObject _spGameObj in Server.spawnedGameObjects.Values)
-        {
-            tenObjects.Add(_spGameObj);
-            if (tenObjects.Count >= 10)
-            {
-                ServerSend.SpawnStructure(id, _spGameObj);
-                tenObjects.Clear();
-            }
-        }
     }
 
     public void AuthConnection(int _playerId, bool _isSuccess)

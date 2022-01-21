@@ -193,7 +193,21 @@ public class ClientHandle : MonoBehaviour
 
     public static void PlayerCanUseTool(Packet _packet)
     {
-        int _instanceObject = _packet.ReadInt();
+        uint _instanceObject = _packet.ReadUint();
         Debug.Log("Trigger: " + _instanceObject);
+        if(GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
+        {
+            spawn.GetComponent<TouchableStructures>().setHightLightActive();
+        }
+    }
+
+    public static void PlayerRemoveUseTool(Packet _packet)
+    {
+        uint _instanceObject = _packet.ReadUint();
+        Debug.Log("Trigger: " + _instanceObject);
+        if (GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
+        {
+            spawn.GetComponent<TouchableStructures>().setNormalLightActive();
+        }
     }
 }
