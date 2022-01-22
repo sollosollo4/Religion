@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [SerializeField]
 public class TouchableStructures : MonoBehaviour
@@ -10,38 +11,31 @@ public class TouchableStructures : MonoBehaviour
     [SerializeField] public Motion TouchMotion;
     [SerializeField] public GameObject TouchTool;
 
-    [SerializeField] public Material NormalMaterial;
-    [SerializeField] public Material HightLightMaterial;
+    GameObject PlayerPanelTool;
 
     private bool isHightlated;
 
     private void Start()
     {
-        NormalMaterial = GetComponent<Renderer>().material;
+        PlayerPanelTool = UIManager.instance.toolPanel;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isHightlated)
-        {
-            GetComponent<Renderer>().material = HightLightMaterial;
-        }
-        else
-        {
-            GetComponent<Renderer>().material = NormalMaterial;
-        }
     }
 
     public void setNormalLightActive()
     {
         //isHightlated = true;
         GetComponent<GlowObjectCmd>().SetActive(false);
+        PlayerPanelTool.gameObject.SetActive(false);
     }
 
     public void setHightLightActive()
     {
         //isHightlated = false;
         GetComponent<GlowObjectCmd>().SetActive(true);
+        PlayerPanelTool.gameObject.SetActive(true);
     }
 }

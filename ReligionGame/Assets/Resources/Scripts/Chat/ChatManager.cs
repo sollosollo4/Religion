@@ -38,23 +38,16 @@ public class ChatManager : MonoBehaviour
 
     private void Update()
     {
-        try
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (!string.IsNullOrEmpty(getCurrentMessage) && isPlayerTypingMessage)
             {
-                if (!string.IsNullOrEmpty(getCurrentMessage) && isPlayerTypingMessage)
-                {
-                    CreateChatMessageAndSend();
-                }
-                else
-                {
-                    OpenMessageInput();
-                }
+                CreateChatMessageAndSend();
             }
-        }
-        catch(Exception e)
-        {
-            Debug.LogError(e);
+            else
+            {
+                OpenMessageInput();
+            }
         }
     }
 

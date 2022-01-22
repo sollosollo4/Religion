@@ -36,6 +36,12 @@ public class Authorization : MonoBehaviour
         //StartCoroutine(changeColorBackround());
     }
 
+    private void Start()
+    {
+        loginInput.text = "admin";
+        passwordInput.text = "12345";
+    }
+
     IEnumerator changeColorBackround()
     {
         while (true)

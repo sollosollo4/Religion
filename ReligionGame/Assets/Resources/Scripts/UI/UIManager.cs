@@ -11,8 +11,8 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
 
     public GameObject ChatPanel;
-    public GameObject startMenu;
-    public InputField usernameField;
+    public GameObject gameMenu;
+    public GameObject toolPanel;
 
     private void Awake()
     {

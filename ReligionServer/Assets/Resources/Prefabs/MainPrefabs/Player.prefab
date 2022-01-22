@@ -50,7 +50,7 @@ MonoBehaviour:
   username: 
   controller: {fileID: 3706280240178001642}
   shootOrigin: {fileID: 6504662194755680138}
-  gravity: -19.62
+  gravity: -18.62
   moveSpeed: 5
   jumpSpeed: 8
   throwForce: 750
