@@ -15,6 +15,16 @@ public class PlayerManager : MonoBehaviour
     public SkinnedMeshRenderer model;
     public Animator animator;
 
+    public bool IsJump;
+    public bool IsJumpCooldown;
+    public bool IsTool;
+
+    public string WorkTouchName;
+    public TouchableStructures lastTouchableStructure;
+
+    public GameObject ToolHand;
+    public GameObject CurrentWorkTool;
+
     public void Initialize(int _id, string _username)
     {
         id = _id;
@@ -35,10 +45,15 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public void SetWorkName(string touchEventName)
+    {
+        WorkTouchName = touchEventName;
+    }
+
     public void SetPlayerInfoView()
     {
-        if (id != Client.instance.myId) { 
-            //GetComponent<ObjectInfoView>().text = username;
+        if (id != Client.instance.myId) 
+        {
         }
     }
 
@@ -57,9 +72,20 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void SetPlayerStateAnimation(Dictionary<string, bool> inputs)
+    public void Die()
     {
-        bool singleAnimation = inputs.Values.Distinct().Count() == 1;
+        model.enabled = false;
+    }
+
+    public void Respawn()
+    {
+        model.enabled = true;
+        SetHealth(maxHealth);
+    }
+
+    public void SetPlayerMovementStateAnimation(Dictionary<string, bool> inputs)
+    {
+        bool singleAnimation = inputs.Values.Where(x => x == true).Count() == 1;
         bool noOneAnimation = inputs.Values.All(x => !x);
 
         if (noOneAnimation)
@@ -72,7 +98,17 @@ public class PlayerManager : MonoBehaviour
             {
                 if (animationInput.Value)
                 {
-                    SetState(animationInput.Key);
+                    if(animationInput.Key == "Jump")
+                    {
+                        if(!IsJumpCooldown)
+                        {
+                            SetState(animationInput.Key);
+                        }
+                    }
+                    else
+                    {
+                        SetState(animationInput.Key);
+                    }
                 }
             }
         }
@@ -83,60 +119,77 @@ public class PlayerManager : MonoBehaviour
             {
                 if (animationInput.Value)
                 {
-                    AnimationNameConcat += animationInput.Key;
+                    if (animationInput.Key == "Jump")
+                    {
+                        if (!IsJumpCooldown)
+                        {
+                            SetState(animationInput.Key);
+                            AnimationNameConcat += animationInput.Key;
+                        }
+                    }
+                    else
+                    {
+                         AnimationNameConcat += animationInput.Key;
+                    }
                 }
             }
             SetState(AnimationNameConcat);
         }
     }
-
-    public void Die()
+    
+    public void SetWork(Dictionary<string, bool> inputsAnimation)
     {
-        model.enabled = false;
-    }
+        foreach (var animationInput in inputsAnimation)
+        {
+            if (animationInput.Value && WorkTouchName != string.Empty)
+            {
+                IsTool = true;
+                Debug.Log(WorkTouchName);
 
-    public void Respawn()
-    {
-        model.enabled = true;
-        SetHealth(maxHealth);
+                // Get animation state name by near object
+                SetState(WorkTouchName);
+                lastTouchableStructure.StartMining();
+            }
+        }
     }
 
     public void SetState(byte state)
     {
-        animationState = state;
-        //Debug.Log($"NO ONE Animation: {GetAnimationStateName(state)}");
-        animator.Play(GetAnimationStateName(state));
         
+        animationState = state;
+
+        if (IsJump && !IsJumpCooldown)
+        {
+            animator.Play(GetAnimationStateName(9));
+        }
+        else if (IsTool)
+        {
+            animator.Play(WorkTouchName);
+        }
+        else
+        {
+            animator.Play(GetAnimationStateName(animationState));
+        }
     }
 
     public void SetState(string state)
     {
         animationState = GetAnimationStateName(state);
-        //Debug.Log($"Animation: {state}");
-        animator.Play(GetAnimationStateName(animationState));
-    }
 
-    public IEnumerator PlayAndWaitForAnim(Animator targetAnim, string stateName)
-    {
-        int animHash = Animator.StringToHash("Base."+stateName);
-
-        targetAnim.CrossFadeInFixedTime(stateName, 0.6f, 0);
-
-        while (targetAnim.GetCurrentAnimatorStateInfo(0).fullPathHash != animHash)
+        if (IsJump && !IsJumpCooldown)
         {
-            yield return null;
+            animator.Play(GetAnimationStateName(9));
         }
-
-        float counter = 0;
-        float waitTime = targetAnim.GetCurrentAnimatorStateInfo(0).length;
-
-        while (counter < (waitTime))
+        else if (IsTool)
         {
-            counter += Time.deltaTime;
-            yield return null;
+            animator.Play(WorkTouchName);
+        }
+        else
+        {
+            animator.Play(GetAnimationStateName(animationState));
         }
     }
-
+    
     public static string GetAnimationStateName(byte state)
     {
         switch (state)
@@ -161,6 +214,8 @@ public class PlayerManager : MonoBehaviour
                 return "BackwardRight";
             case 9:
                 return "Jump";
+            case 10: 
+                return "Pickaxe";
             default:
                 return "Idle01";
         }
@@ -190,22 +245,8 @@ public class PlayerManager : MonoBehaviour
                 return 8;
             case "Jump":
                 return 9;
-            case "ForwardJump":
-                return 9;
-            case "BackwardJump":
-                return 9;
-            case "LeftJump":
-                return 9;
-            case "RightJump":
-                return 9;
-            case "ForwardLeftJump":
-                return 9;
-            case "ForwardRightJump":
-                return 9;
-            case "BackwardLeftJump":
-                return 9;
-            case "BackwardRightJump":
-                return 9;
+            case "Pickaxe":
+                return 10;
             default:
                 return 0;
         }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8819256922348106597}
   - component: {fileID: 8283048436765457631}
+  - component: {fileID: 6504643812865045562}
   - component: {fileID: 8152571530784198597}
   m_Layer: 0
   m_Name: Player
@@ -53,6 +54,21 @@ MonoBehaviour:
   animationState: 0
   model: {fileID: 8782286837104886418}
   animator: {fileID: 5016340928517132287}
+  animationStateTool: 
+--- !u!114 &6504643812865045562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7677484484946083636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dd8943741930ae4bb2c1c3cd25bfffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlowColor: {r: 0.06955016, g: 1, b: 0, a: 0.50980395}
+  LerpFactor: 5
 --- !u!114 &8152571530784198597
 MonoBehaviour:
   m_ObjectHideFlags: 0

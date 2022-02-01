@@ -99,6 +99,9 @@ public class ServerSend
         {
             _packet.Write(_player.id);
             _packet.Write(_player.transform.position);
+            _packet.Write(_player.isJump);
+            _packet.Write(_player.isJumpCooldown);
+            _packet.Write(_player.isTool);
 
             SendUDPDataToAll(_packet);
         }

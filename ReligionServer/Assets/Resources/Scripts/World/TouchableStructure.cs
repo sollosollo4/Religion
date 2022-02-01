@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,8 @@ using UnityEngine;
 
 public class TouchableStructure : MonoBehaviour
 {
+    public float MiningTime = 5f;
+
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Touched");
@@ -27,6 +30,18 @@ public class TouchableStructure : MonoBehaviour
             uint currentSpawnedObjectId = GetComponent<SpawnedGameObject>().spawnedObjectId;
             ServerSend.PlayerRemoveUseTool(playerId, currentSpawnedObjectId);
         }
+    }
+
+    public void StartMining(int _fromClient)
+    {
+        StartCoroutine(Mining(MiningTime, _fromClient));
+    }
+
+    private IEnumerator Mining(float miningTime, int _fromClient)
+    {
+        yield return new WaitForSeconds(miningTime);
+
+        Server.clients[_fromClient].player.isTool = false;
     }
 }
 

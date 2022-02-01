@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>Sends player input to the server.</summary>
     private void SendInputToServer()
     {
-        Dictionary<string, bool> _inputsAnimation = new Dictionary<string, bool>()
+        Dictionary<string, bool> _inputsMovementsAnimation = new Dictionary<string, bool>()
         {
             { "Forward", Input.GetKey(KeyCode.W) },
             { "Backward", Input.GetKey(KeyCode.S) },
@@ -39,8 +39,16 @@ public class PlayerController : MonoBehaviour
             { "Jump", Input.GetKey(KeyCode.Space) }
         };
 
-        GameManager.players[Client.instance.myId].SetPlayerStateAnimation(_inputsAnimation);
+        GameManager.players[Client.instance.myId].SetPlayerMovementStateAnimation(_inputsMovementsAnimation);
 
-        ClientSend.PlayerMovement(_inputsAnimation);
+        Dictionary<string, bool> _inputsWorkAnimation = new Dictionary<string, bool>()
+        {
+            { "UseTool", Input.GetKey(KeyCode.E) },
+        };
+
+        GameManager.players[Client.instance.myId].SetWork(_inputsWorkAnimation);
+
+        ClientSend.PlayerMovement(_inputsMovementsAnimation);
+        ClientSend.PlayerAnimation(GameManager.players[Client.instance.myId].animationState);
     }
 }

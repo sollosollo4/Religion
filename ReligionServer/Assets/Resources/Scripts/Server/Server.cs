@@ -143,7 +143,8 @@ public class Server
             { (int)ClientPackets.chatMessage, ServerHandle.PlayerChatMessage },
             { (int)ClientPackets.playerTryConnection, ServerHandle.PlayerTryConnection },
             { (int)ClientPackets.characterNew, ServerHandle.CharacterNew },
-            { (int)ClientPackets.animationState, ServerHandle.AnimationState }
+            { (int)ClientPackets.animationState, ServerHandle.AnimationState },
+            { (int)ClientPackets.playerUseTool, ServerHandle.PlayerUseTool }
         };
 
         Debug.Log("Initialized packets.");

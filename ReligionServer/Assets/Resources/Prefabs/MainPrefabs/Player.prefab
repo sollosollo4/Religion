@@ -51,14 +51,18 @@ MonoBehaviour:
   controller: {fileID: 3706280240178001642}
   shootOrigin: {fileID: 6504662194755680138}
   gravity: -18.62
-  moveSpeed: 5
-  jumpSpeed: 8
-  throwForce: 750
+  moveSpeed: 3.8
+  jumpSpeed: 6.2
+  jumpCooldown: 0.7
+  throwForce: 550
   health: 0
   maxHealth: 100
-  itemAmount: 1
-  maxItemAmount: 3
+  itemAmount: 900
+  maxItemAmount: 900
   animationState: 0
+  isJump: 0
+  isJumpCooldown: 0
+  isTool: 0
 --- !u!143 &3706280240178001642
 CharacterController:
   m_ObjectHideFlags: 0
@@ -101,7 +105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5786540839377165896}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.4, z: 0}
+  m_LocalPosition: {x: 0.486, y: 1.404, z: 0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8806424889652603875}
