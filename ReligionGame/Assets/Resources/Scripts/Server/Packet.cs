@@ -26,9 +26,9 @@ public enum ServerPackets
     chatMessage,
     tryConnection,
     playerCreateNewCharacter,
-    playerState,
-    playerCanUseTool,
-    playerRemoveUseTool
+    playerAnimationState,
+    playerTouchStructure,
+    playerUnTouchStructure
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -42,6 +42,7 @@ public enum ClientPackets
     tryConnection,
     createNewCharacter,
     animationState,
+    playerUseTool,
 }
 
 public class Packet : IDisposable

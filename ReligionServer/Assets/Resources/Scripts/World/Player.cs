@@ -11,12 +11,18 @@ public class Player : MonoBehaviour
     public float gravity = -9.81f;
     public float moveSpeed = 5f;
     public float jumpSpeed = 5f;
+    public float jumpCooldown = 0.7f;
     public float throwForce = 600f;
     public float health;
     public float maxHealth = 100f;
     public int itemAmount = 0;
     public int maxItemAmount = 3;
     public byte animationState = 0;
+
+    public bool isJump;
+    public bool isJumpCooldown;
+
+    public bool isTool;
 
     private bool[] inputs;
     private float yVelocity = 0;
@@ -76,28 +82,48 @@ public class Player : MonoBehaviour
         if (controller.isGrounded)
         {
             yVelocity = 0f;
-            if (inputs[4])
+            isJump = false;
+
+            if (inputs[4] && !isJumpCooldown)
             {
+                isJump = true;
                 yVelocity = jumpSpeed;
             }
+
+            if (isJump)
+            {
+                isJumpCooldown = true;
+                StartCoroutine(jump());
+            }
         }
+
+
         yVelocity += gravity;
 
         _moveDirection.y = yVelocity;
         controller.Move(_moveDirection);
 
-        ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
+        ServerSend.PlayerPosition(this);
+        ServerSend.PlayerAnimationState(this);
+    }
+
+    public IEnumerator jump()
+    {
+        yield return new WaitForSeconds(jumpCooldown);
+
+        if (controller.isGrounded)
+            isJumpCooldown = false;
+        else yield return jump();
     }
 
     /// <summary>Updates the player input with newly received input.</summary>
     /// <param name="_inputs">The new key inputs.</param>
     /// <param name="_rotation">The new rotation.</param>
-    public void SetInput(bool[] _inputs, Quaternion _rotation, byte _animationState)
+    public void SetInput(bool[] _inputs, Quaternion _rotation)
     {
         inputs = _inputs;
         transform.rotation = _rotation;
-        animationState = _animationState;
     }
 
     public void Shoot(Vector3 _viewDirection)
@@ -119,6 +145,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
 
     public void ThrowItem(Vector3 _viewDirection)
     {
@@ -146,7 +173,7 @@ public class Player : MonoBehaviour
         {
             health = 0f;
             controller.enabled = false;
-            transform.position = new Vector3(0f, 25f, 0f);
+            transform.position = new Vector3(330f, 18f, 330f);
             ServerSend.PlayerPosition(this);
             StartCoroutine(Respawn());
         }

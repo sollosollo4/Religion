@@ -11,7 +11,6 @@ public class ClientHandle : MonoBehaviour
         string _msg = _packet.ReadString();
         int _myId = _packet.ReadInt();
 
-        Debug.Log($"Message from server: {_msg}");
         Client.instance.myId = _myId;
 
         // Now that we have the client's id, connect UDP
@@ -32,10 +31,16 @@ public class ClientHandle : MonoBehaviour
     {
         int _id = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
+        bool _isJump = _packet.ReadBool();
+        bool _isJumpCooldown = _packet.ReadBool();
+        bool _isTool = _packet.ReadBool();
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
             _player.transform.position = _position;
+            _player.IsJump = _isJump;
+            _player.IsJumpCooldown = _isJumpCooldown;
+            _player.IsTool = _isTool;
         }
     }
 
@@ -124,7 +129,11 @@ public class ClientHandle : MonoBehaviour
         int _projectileId = _packet.ReadInt();
         Vector3 _position = _packet.ReadVector3();
 
-        GameManager.projectiles[_projectileId].Explode(_position);
+        if(GameManager.projectiles.TryGetValue(_projectileId, out ProjectileManager manager))
+        {
+            manager.Explode(_position);
+        }
+        
     }
 
     public static void SpawnEnemy(Packet _packet)
@@ -179,32 +188,32 @@ public class ClientHandle : MonoBehaviour
         }
     }
 
-    public static void PlayerState(Packet _packet)
+    public static void PlayerAnimationState(Packet _packet)
     {
         int _id = _packet.ReadInt();
         byte _state = _packet.ReadByte();
 
-        if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
+        if (GameManager.players[Client.instance.myId].id != _id)
         {
-            Debug.Log($"Set State from other player{_state}");
-            _playerManager.SetState(_state);
+            if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
+            {
+                _playerManager.SetState(_state);
+            }
         }
     }
 
-    public static void PlayerCanUseTool(Packet _packet)
+    public static void PlayerTouchStructure(Packet _packet)
     {
         uint _instanceObject = _packet.ReadUint();
-        Debug.Log("Trigger: " + _instanceObject);
         if(GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
         {
             spawn.GetComponent<TouchableStructures>().setHightLightActive();
         }
     }
 
-    public static void PlayerRemoveUseTool(Packet _packet)
+    public static void PlayerUnTouchStructure(Packet _packet)
     {
         uint _instanceObject = _packet.ReadUint();
-        Debug.Log("Trigger: " + _instanceObject);
         if (GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
         {
             spawn.GetComponent<TouchableStructures>().setNormalLightActive();

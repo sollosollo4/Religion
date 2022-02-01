@@ -46,7 +46,6 @@ public class ClientSend : MonoBehaviour
                 _packet.Write(_input.Value);
             }
             _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
-            _packet.Write(GameManager.players[Client.instance.myId].animationState);
 
             SendUDPData(_packet);
         }
@@ -98,6 +97,17 @@ public class ClientSend : MonoBehaviour
         {
             _packet.Write(_characterName);
             _packet.Write(_className);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    public static void PlayerUseTool(uint _spawnableObjectid, byte animationState)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerUseTool))
+        {
+            _packet.Write(_spawnableObjectid);
+            _packet.Write(animationState);
 
             SendTCPData(_packet);
         }

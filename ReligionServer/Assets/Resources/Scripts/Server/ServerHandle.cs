@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ServerHandle
@@ -26,10 +27,8 @@ public class ServerHandle
             _inputs[i] = _packet.ReadBool();
         }
         Quaternion _rotation = _packet.ReadQuaternion();
-        byte animationState = _packet.ReadByte();
 
-        Server.clients[_fromClient].player.SetInput(_inputs, _rotation, animationState);
-        ServerSend.PlayerAnimationState(Server.clients[_fromClient].player);
+        Server.clients[_fromClient].player.SetInput(_inputs, _rotation);
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)
@@ -86,5 +85,18 @@ public class ServerHandle
     public static void AnimationState(int _fromClient, Packet _packet)
     {
         Server.clients[_fromClient].player.animationState = _packet.ReadByte();
+    }
+
+    public static void PlayerUseTool(int _fromClient, Packet _packet)
+    {
+        uint _structureId = _packet.ReadUint();
+        byte _animationId = _packet.ReadByte();
+
+        SpawnedGameObject touchableElement = UnityEngine.Object.FindObjectsOfType<SpawnedGameObject>().First(el => el.spawnedObjectId == _structureId);
+
+        touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
+
+        Server.clients[_fromClient].player.isTool = true;
+        Server.clients[_fromClient].player.animationState = _animationId;
     }
 }

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Assets.Database.Controllers;
 using System;
 using System.Collections;
@@ -27,9 +28,8 @@ public class StructuresPrefabsId : MonoBehaviour
 
         Server.mySqlConnection = new Assets.Database.MySqlConnectionClass();
         Server.mySqlConnection.getController<StructureController>().savePrefabs(touchableObjects);
-
-        
     }
+
     public IEnumerator BuildPrefabPoolCoroutine()
     {
         var _prefabId = 1;
@@ -100,3 +100,4 @@ public class StructuresPrefabsId : MonoBehaviour
         }
     }
 }
+#endif

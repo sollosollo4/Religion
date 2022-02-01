@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4813562246845775538}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.954, z: 0.09}
+  m_LocalPosition: {x: 0, y: 1.767, z: 0.361}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8819256922348106597}
@@ -60,7 +60,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 90
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 8283048436765457631}
-  sensitivity: 100
-  clampAngle: 85
+  sensitivity: 80
+  clampAngle: 50
 --- !u!114 &6001719116813608789
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8ee42d738f6ed4faabd8168da57bbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Intensity: 5
+  Intensity: 4
 --- !u!114 &7128327367165704310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +137,6 @@ GameObject:
   - component: {fileID: 8819256922348106597}
   - component: {fileID: 8283048436765457631}
   - component: {fileID: 6761221046541469059}
-  - component: {fileID: 7734649459681530028}
   m_Layer: 0
   m_Name: LocalPlayer
   m_TagString: Player
@@ -181,6 +180,12 @@ MonoBehaviour:
   animationState: 0
   model: {fileID: 3888762895771648520}
   animator: {fileID: 687578935802580837}
+  IsJump: 0
+  IsJumpCooldown: 0
+  IsTool: 0
+  WorkTouchName: 
+  lastTouchableStructure: {fileID: 0}
+  ToolHand: {fileID: 638455917200356337}
 --- !u!114 &6761221046541469059
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,49 +199,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camTransform: {fileID: 1991486023971720568}
---- !u!20 &7734649459681530028
-Camera:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7677484484946083636}
-  m_Enabled: 1
-  serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
-  m_projectionMatrixMode: 1
-  m_GateFitMode: 2
-  m_FOVAxisMode: 0
-  m_SensorSize: {x: 36, y: 24}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
-  m_NormalizedViewPortRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
-  field of view: 60
-  orthographic: 0
-  orthographic size: 5
-  m_Depth: 0
-  m_CullingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_RenderingPath: -1
-  m_TargetTexture: {fileID: 0}
-  m_TargetDisplay: 0
-  m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
-  m_StereoConvergence: 10
-  m_StereoSeparation: 0.022
 --- !u!1001 &637704263166093443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -247,6 +209,10 @@ PrefabInstance:
     - target: {fileID: 1260597861999642, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_Name
       value: BasicMotionsDummy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1260597861999642, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4759721911903040, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_RootOrder
@@ -297,6 +263,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 9100000, guid: a8555c0cff30527479e32562cef9141f, type: 2}
     - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: e0cad30f368253446b20171acd643881, type: 2}
@@ -315,5 +285,10 @@ Animator:
 --- !u!137 &3888762895771648520 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+  m_PrefabInstance: {fileID: 637704263166093443}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &638455917200356337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1641434104814450, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
   m_PrefabInstance: {fileID: 637704263166093443}
   m_PrefabAsset: {fileID: 0}
