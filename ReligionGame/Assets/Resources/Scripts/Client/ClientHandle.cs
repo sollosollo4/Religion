@@ -30,17 +30,30 @@ public class ClientHandle : MonoBehaviour
     public static void PlayerPosition(Packet _packet)
     {
         int _id = _packet.ReadInt();
-        Vector3 _position = _packet.ReadVector3();
-        bool _isJump = _packet.ReadBool();
-        bool _isJumpCooldown = _packet.ReadBool();
-        bool _isTool = _packet.ReadBool();
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            _player.transform.position = _position;
-            _player.IsJump = _isJump;
-            _player.IsJumpCooldown = _isJumpCooldown;
-            _player.IsTool = _isTool;
+            
+            Vector3 _position = _packet.ReadVector3();
+            uint _ticks = _packet.ReadUint();
+            float _deliveryTime = _packet.ReadFloat();
+
+            if (_id == Client.instance.myId)
+            {
+                _player.GetComponent<PlayerMovement>().SetStateMessages(
+                    new StateMessage()
+                    {
+                        position = _position,
+                        tick_number = _ticks,
+                        delivery_time = _deliveryTime,
+                    }
+                );
+            }
+            else
+            {
+                _player.transform.position = Vector3.Lerp(_player.transform.position, _position, 0.19f);
+            }
+            
         }
     }
 
@@ -51,7 +64,7 @@ public class ClientHandle : MonoBehaviour
 
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            _player.transform.rotation = _rotation;
+            //_player.transform.rotation = _rotation;
         }
     }
 
@@ -193,30 +206,52 @@ public class ClientHandle : MonoBehaviour
         int _id = _packet.ReadInt();
         byte _state = _packet.ReadByte();
 
-        if (GameManager.players[Client.instance.myId].id != _id)
+        
+        if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
         {
-            if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
-            {
-                _playerManager.SetState(_state);
-            }
+            _playerManager.SetState(_state);
         }
     }
 
     public static void PlayerTouchStructure(Packet _packet)
     {
+        bool _touch = _packet.ReadBool();
         uint _instanceObject = _packet.ReadUint();
         if(GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
         {
-            spawn.GetComponent<TouchableStructures>().setHightLightActive();
+            spawn.GetComponent<TouchableStructures>().setHightLight(_touch);
         }
     }
 
-    public static void PlayerUnTouchStructure(Packet _packet)
+    public static void PlayerStartMining(Packet _packet)
     {
-        uint _instanceObject = _packet.ReadUint();
-        if (GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
+        int _fromClient = _packet.ReadInt();
+        byte _animationId = _packet.ReadByte();
+        uint _touchableObjectId = _packet.ReadUint();
+
+        if (GameManager.players.TryGetValue(_fromClient, out PlayerManager player))
         {
-            spawn.GetComponent<TouchableStructures>().setNormalLightActive();
+            if(GameManager.spawnables.TryGetValue(_touchableObjectId, out SpawnedGameObject spawn))
+            {
+                player.IsTool = true;
+                spawn.GetComponent<TouchableStructures>().StartMining(_fromClient);
+                player.SetState(_animationId);
+            }
+        }
+    }
+
+    public static void PlayerEndMining(Packet _packet)
+    {
+        int _fromClient = _packet.ReadInt();
+        uint _instanceObject = _packet.ReadUint();
+
+        if (GameManager.players.TryGetValue(_fromClient, out PlayerManager player))
+        {
+            if (GameManager.spawnables.TryGetValue(_instanceObject, out SpawnedGameObject spawn))
+            {
+                spawn.GetComponent<TouchableStructures>().EndMining(_fromClient);
+                player.IsTool = false;
+            }
         }
     }
 }

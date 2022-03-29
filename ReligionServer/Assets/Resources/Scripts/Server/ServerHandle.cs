@@ -21,14 +21,23 @@ public class ServerHandle
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
-        bool[] _inputs = new bool[_packet.ReadInt()];
-        for (int i = 0; i < _inputs.Length; i++)
+        int _inputsCount = _packet.ReadInt();
+        InputMessage inputMsg;
+        inputMsg.inputs = new List<Inputs>(_inputsCount);
+        for (int i = 0; i < _inputsCount; i++)
         {
-            _inputs[i] = _packet.ReadBool();
+            Inputs inpt;
+            inpt.moveD = _packet.ReadVector3();
+            inpt.slopeD = _packet.ReadVector3();
+            inpt.jump = _packet.ReadBool();
+            inpt.sprint = _packet.ReadBool();
+            inputMsg.inputs.Add(inpt);
         }
-        Quaternion _rotation = _packet.ReadQuaternion();
+        inputMsg.camRotation = _packet.ReadFloat();
+        inputMsg.delivery_time = _packet.ReadFloat();
+        inputMsg.start_tick_number = _packet.ReadUint();
 
-        Server.clients[_fromClient].player.SetInput(_inputs, _rotation);
+        Server.clients[_fromClient].player.GetComponent<PlayerPhysics>().SetInput(inputMsg);
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)
@@ -55,6 +64,8 @@ public class ServerHandle
     {
         string _login = _packet.ReadString();
         string _password = _packet.ReadString();
+
+        Debug.Log(_login + " <--> " + _password);
 
         if (AuthorizationAtDatabase.CheckUserPasswordhash(_login, _password, _fromClient))
         {
@@ -93,10 +104,9 @@ public class ServerHandle
         byte _animationId = _packet.ReadByte();
 
         SpawnedGameObject touchableElement = UnityEngine.Object.FindObjectsOfType<SpawnedGameObject>().First(el => el.spawnedObjectId == _structureId);
-
-        touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
-
         Server.clients[_fromClient].player.isTool = true;
         Server.clients[_fromClient].player.animationState = _animationId;
+        touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
+        ServerSend.PlayerStartMining(_fromClient, _animationId, _structureId);
     }
 }

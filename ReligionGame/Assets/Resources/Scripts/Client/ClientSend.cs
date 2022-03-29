@@ -34,30 +34,13 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    /// <summary>Sends player input to the server.</summary>
-    /// <param name="_inputs"></param>
-    public static void PlayerMovement(Dictionary<string, bool> _inputs)
-    {
-        using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
-        {
-            _packet.Write(_inputs.Count);
-            foreach (var _input in _inputs)
-            {
-                _packet.Write(_input.Value);
-            }
-            _packet.Write(GameManager.players[Client.instance.myId].transform.rotation);
-
-            SendUDPData(_packet);
-        }
-    }
-
     public static void PlayerShoot(Vector3 _facing)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerShoot))
         {
             _packet.Write(_facing);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
         }
     }
 
@@ -67,7 +50,7 @@ public class ClientSend : MonoBehaviour
         {
             _packet.Write(_facing);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
         }
     }
 
@@ -77,7 +60,7 @@ public class ClientSend : MonoBehaviour
         {
             _packet.Write(_message);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
         }
     }
     
@@ -98,18 +81,38 @@ public class ClientSend : MonoBehaviour
             _packet.Write(_characterName);
             _packet.Write(_className);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
         }
     }
 
-    public static void PlayerUseTool(uint _spawnableObjectid, byte animationState)
+    public static void PlayerUseTool(uint _spawnableObjectid, byte _animationState)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerUseTool))
         {
             _packet.Write(_spawnableObjectid);
-            _packet.Write(animationState);
+            _packet.Write(_animationState);
 
-            SendTCPData(_packet);
+            SendUDPData(_packet);
+        }
+    }
+
+    public static void PlayerMovement(InputMessage _inputMessage)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
+        {
+            _packet.Write(_inputMessage.inputs.Count);
+            foreach (Inputs _input in _inputMessage.inputs)
+            {
+                _packet.Write(_input.moveD);
+                _packet.Write(_input.slopeD);
+                _packet.Write(_input.jump);
+                _packet.Write(_input.sprint);
+            }
+            _packet.Write(_inputMessage.camRotation);
+            _packet.Write(_inputMessage.delivery_time);
+            _packet.Write(_inputMessage.start_tick_number);
+
+            SendUDPData(_packet);
         }
     }
     #endregion

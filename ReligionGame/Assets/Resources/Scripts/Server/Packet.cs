@@ -28,7 +28,8 @@ public enum ServerPackets
     playerCreateNewCharacter,
     playerAnimationState,
     playerTouchStructure,
-    playerUnTouchStructure
+    playerEndMining,
+    playerStartMining
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -158,6 +159,10 @@ public class Packet : IDisposable
     /// <summary>Adds an int to the packet.</summary>
     /// <param name="_value">The int to add.</param>
     public void Write(int _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
+    }
+    public void Write(uint _value)
     {
         buffer.AddRange(BitConverter.GetBytes(_value));
     }

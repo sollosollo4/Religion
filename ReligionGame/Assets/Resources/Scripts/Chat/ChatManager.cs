@@ -64,7 +64,7 @@ public class ChatManager : MonoBehaviour
             chatPlayerMessageInputField.Select();
             chatPlayerMessageInputField.ActivateInputField();
 
-            CameraController.instance.ToggleCursorMode();
+            //PlayerLook.instance.ToggleCursorMode();
         }
     }
 
@@ -74,7 +74,7 @@ public class ChatManager : MonoBehaviour
         isPlayerTypingMessage = false;
         chatPlayerMessageInputField.gameObject.SetActive(isPlayerTypingMessage);
         chatPlayerMessageInputField.DeactivateInputField();
-        CameraController.instance.ToggleCursorMode();
+        //PlayerLook.instance.ToggleCursorMode();
     }
     
 

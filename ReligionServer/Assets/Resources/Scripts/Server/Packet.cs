@@ -27,8 +27,9 @@ public enum ServerPackets
     playerTryConnection,
     playerCreateNewCharacter,
     playerState,
-    playerCanUseTool,
-    playerRemoveUseTool
+    playerTouchStructure,
+    playerEndMining,
+    playerStartMining
 }
 
 /// <summary>Sent from client to server.</summary>

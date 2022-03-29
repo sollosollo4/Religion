@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7677484484946083636}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 330, y: 18, z: 330}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4962445956177202009}
@@ -54,7 +54,11 @@ MonoBehaviour:
   animationState: 0
   model: {fileID: 8782286837104886418}
   animator: {fileID: 5016340928517132287}
-  animationStateTool: 
+  IsTool: 0
+  WorkTouchName: 
+  lastTouchableStructure: {fileID: 0}
+  ToolHand: {fileID: 4957084810820498283}
+  CurrentWorkTool: {fileID: 0}
 --- !u!114 &6504643812865045562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,5 +175,10 @@ Animator:
 --- !u!137 &8782286837104886418 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+  m_PrefabInstance: {fileID: 4958127559763945497}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4957084810820498283 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1641434104814450, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
   m_PrefabInstance: {fileID: 4958127559763945497}
   m_PrefabAsset: {fileID: 0}

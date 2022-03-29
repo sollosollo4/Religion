@@ -8,10 +8,6 @@ public class Player : MonoBehaviour
     public string username;
     public CharacterController controller;
     public Transform shootOrigin;
-    public float gravity = -9.81f;
-    public float moveSpeed = 5f;
-    public float jumpSpeed = 5f;
-    public float jumpCooldown = 0.7f;
     public float throwForce = 600f;
     public float health;
     public float maxHealth = 100f;
@@ -21,109 +17,13 @@ public class Player : MonoBehaviour
 
     public bool isJump;
     public bool isJumpCooldown;
-
     public bool isTool;
-
-    private bool[] inputs;
-    private float yVelocity = 0;
-
-    private void Start()
-    {
-        gravity *= Time.fixedDeltaTime * Time.fixedDeltaTime;
-        moveSpeed *= Time.fixedDeltaTime;
-        jumpSpeed *= Time.fixedDeltaTime;
-    }
 
     public void Initialize(int _id, string _username)
     {
         id = _id;
         username = _username;
         health = maxHealth;
-
-        inputs = new bool[5];
-    }
-
-    /// <summary>Processes player input and moves the player.</summary>
-    public void FixedUpdate()
-    {
-        if (health <= 0f)
-        {
-            return;
-        }
-
-        Vector2 _inputDirection = Vector2.zero;
-        if (inputs[0])
-        {
-            _inputDirection.y += 1;
-        }
-        if (inputs[1])
-        {
-            _inputDirection.y -= 1;
-        }
-        if (inputs[2])
-        {
-            _inputDirection.x -= 1;
-        }
-        if (inputs[3])
-        {
-            _inputDirection.x += 1;
-        }
-
-        Move(_inputDirection);
-    }
-
-    /// <summary>Calculates the player's desired movement direction and moves him.</summary>
-    /// <param name="_inputDirection"></param>
-    private void Move(Vector2 _inputDirection)
-    {
-        Vector3 _moveDirection = transform.right * _inputDirection.x + transform.forward * _inputDirection.y;
-        _moveDirection *= moveSpeed;
-
-        if (controller.isGrounded)
-        {
-            yVelocity = 0f;
-            isJump = false;
-
-            if (inputs[4] && !isJumpCooldown)
-            {
-                isJump = true;
-                yVelocity = jumpSpeed;
-            }
-
-            if (isJump)
-            {
-                isJumpCooldown = true;
-                StartCoroutine(jump());
-            }
-        }
-
-
-        yVelocity += gravity;
-
-        _moveDirection.y = yVelocity;
-        controller.Move(_moveDirection);
-
-        ServerSend.PlayerRotation(this);
-        ServerSend.PlayerPosition(this);
-        ServerSend.PlayerAnimationState(this);
-    }
-
-    public IEnumerator jump()
-    {
-        yield return new WaitForSeconds(jumpCooldown);
-
-        if (controller.isGrounded)
-            isJumpCooldown = false;
-        else yield return jump();
-    }
-
-    /// <summary>Updates the player input with newly received input.</summary>
-    /// <param name="_inputs">The new key inputs.</param>
-    /// <param name="_rotation">The new rotation.</param>
-    public void SetInput(bool[] _inputs, Quaternion _rotation)
-    {
-        inputs = _inputs;
-        transform.rotation = _rotation;
     }
 
     public void Shoot(Vector3 _viewDirection)
@@ -145,7 +45,6 @@ public class Player : MonoBehaviour
             }
         }
     }
-
 
     public void ThrowItem(Vector3 _viewDirection)
     {
@@ -183,7 +82,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator Respawn()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
 
         health = maxHealth;
         controller.enabled = true;
