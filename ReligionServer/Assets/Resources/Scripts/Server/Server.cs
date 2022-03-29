@@ -152,10 +152,12 @@ public class Server
 
     public static void Stop()
     {
-        mySqlConnection.MySqlCloseConnection();
-        if (tcpListener != null)
-            tcpListener.Stop();
-        if (udpListener != null)
-            udpListener.Close();
+        if(mySqlConnection != null)
+            mySqlConnection.MySqlCloseConnection();
+
+        
+        tcpListener.Stop();
+
+        udpListener.Close();
     }
 }

@@ -161,6 +161,10 @@ public class Packet : IDisposable
     {
         buffer.AddRange(BitConverter.GetBytes(_value));
     }
+    public void Write(uint _value)
+    {
+        buffer.AddRange(BitConverter.GetBytes(_value));
+    }
     /// <summary>Adds a long to the packet.</summary>
     /// <param name="_value">The long to add.</param>
     public void Write(long _value)

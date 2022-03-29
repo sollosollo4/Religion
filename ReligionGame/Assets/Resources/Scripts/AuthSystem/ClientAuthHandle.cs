@@ -12,23 +12,27 @@ public class ClientAuthHandle
     public static void TryConnection(Packet _packet)
     {
         bool _isConnected = _packet.ReadBool();
-        string _message = _packet.ReadString();
-        int _myId = _packet.ReadInt();
-
-        Client.instance.myId = _myId;
-
-        // Now that we have the client's id, connect UDP
-        Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
-        
-        int charactersCount = _packet.ReadInt();
-        for(int i=0; i > charactersCount; i++)
+        string _message = "Error logging";
+        if (_isConnected)
         {
-            Character newChar = new Character()
+            _message = _packet.ReadString();
+            int _myId = _packet.ReadInt();
+
+            Client.instance.myId = _myId;
+
+            // Now that we have the client's id, connect UDP
+            Client.instance.udp.Connect(((IPEndPoint)Client.instance.tcp.socket.Client.LocalEndPoint).Port);
+
+            int charactersCount = _packet.ReadInt();
+            for (int i = 0; i > charactersCount; i++)
             {
-                CharacterName = _packet.ReadString(),
-                CharacterClass = CharacterClass.CreateClassByName(_packet.ReadString())
-            };
-            Debug.Log(newChar.CharacterName + " --> " + newChar.CharacterClass.CharacterClassName);
+                Character newChar = new Character()
+                {
+                    CharacterName = _packet.ReadString(),
+                    CharacterClass = CharacterClass.CreateClassByName(_packet.ReadString())
+                };
+                Debug.Log(newChar.CharacterName + " --> " + newChar.CharacterClass.CharacterClassName);
+            }
         }
 
         Authorization.instance.LoadCreateNewCharacterScene(_isConnected, _message);

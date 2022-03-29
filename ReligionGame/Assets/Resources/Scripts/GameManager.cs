@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,15 @@ public class GameManager : MonoBehaviour
     public GameObject projectilePrefab;
     public GameObject enemyPrefab;
     public GameObject scriptableObjectPrefab;
+    public MoveCamera moveCamera;
+    public GameObject StartLocation;
+
+    public Scene MainScene;
+
+    private void Start()
+    {
+        MainScene = SceneManager.GetActiveScene();
+    }
 
     private void Awake()
     {
@@ -48,6 +58,8 @@ public class GameManager : MonoBehaviour
         if (_id == Client.instance.myId)
         {
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
+            moveCamera.cameraPosition = _player.GetComponent<PlayerLook>().cameraPosition;
+            _player.GetComponent<PlayerLook>().cam = moveCamera.transform;
         }
         else
         {

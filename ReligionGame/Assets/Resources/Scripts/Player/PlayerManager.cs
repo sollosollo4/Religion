@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,8 +15,6 @@ public class PlayerManager : MonoBehaviour
     public SkinnedMeshRenderer model;
     public Animator animator;
 
-    public bool IsJump;
-    public bool IsJumpCooldown;
     public bool IsTool;
 
     public string WorkTouchName;
@@ -27,9 +25,12 @@ public class PlayerManager : MonoBehaviour
 
     public void Initialize(int _id, string _username)
     {
+        if(Client.instance.myId == _id)
+            GetComponentInChildren<SkinnedMeshRenderer>().gameObject.SetActive( false );
         id = _id;
         username = _username;
         health = maxHealth;
+
 
         SetPlayerInfoView();
         ActiveChatPanel();
@@ -100,10 +101,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     if(animationInput.Key == "Jump")
                     {
-                        if(!IsJumpCooldown)
-                        {
-                            SetState(animationInput.Key);
-                        }
+                        SetState(animationInput.Key);
                     }
                     else
                     {
@@ -121,11 +119,8 @@ public class PlayerManager : MonoBehaviour
                 {
                     if (animationInput.Key == "Jump")
                     {
-                        if (!IsJumpCooldown)
-                        {
-                            SetState(animationInput.Key);
-                            AnimationNameConcat += animationInput.Key;
-                        }
+                        SetState(animationInput.Key);
+                        AnimationNameConcat += animationInput.Key;
                     }
                     else
                     {
@@ -141,12 +136,9 @@ public class PlayerManager : MonoBehaviour
     {
         foreach (var animationInput in inputsAnimation)
         {
-            if (animationInput.Value && WorkTouchName != string.Empty)
+            if (animationInput.Value && WorkTouchName != string.Empty && lastTouchableStructure.PlayerRaycast(Camera.main))
             {
                 IsTool = true;
-                Debug.Log(WorkTouchName);
-
-                // Get animation state name by near object
                 SetState(WorkTouchName);
                 lastTouchableStructure.StartMining();
             }
@@ -155,14 +147,9 @@ public class PlayerManager : MonoBehaviour
 
     public void SetState(byte state)
     {
-        
         animationState = state;
 
-        if (IsJump && !IsJumpCooldown)
-        {
-            animator.Play(GetAnimationStateName(9));
-        }
-        else if (IsTool)
+        if (IsTool)
         {
             animator.Play(WorkTouchName);
         }
@@ -176,11 +163,7 @@ public class PlayerManager : MonoBehaviour
     {
         animationState = GetAnimationStateName(state);
 
-        if (IsJump && !IsJumpCooldown)
-        {
-            animator.Play(GetAnimationStateName(9));
-        }
-        else if (IsTool)
+        if (IsTool)
         {
             animator.Play(WorkTouchName);
         }

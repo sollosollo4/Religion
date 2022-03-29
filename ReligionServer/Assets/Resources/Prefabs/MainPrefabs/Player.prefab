@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1134415867032800410
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1500254469725387062}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1500254469725387062
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134415867032800410}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8806424889652603875}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4306549827416917697
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,8 +39,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8806424889652603875}
+  - component: {fileID: 6873710362565595304}
+  - component: {fileID: 8972451663113188159}
   - component: {fileID: 8972104286265365136}
-  - component: {fileID: 3706280240178001642}
+  - component: {fileID: 6672595093092249237}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -31,9 +63,40 @@ Transform:
   m_Children:
   - {fileID: 6187991624004610801}
   - {fileID: 6504662194755680138}
+  - {fileID: 1500254469725387062}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &6873710362565595304
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306549827416917697}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.24
+  m_Height: 1.9
+  m_Direction: 1
+  m_Center: {x: -0.0045, y: 0.95, z: -0.015}
+--- !u!54 &8972451663113188159
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306549827416917697}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &8972104286265365136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,12 +111,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   username: 
-  controller: {fileID: 3706280240178001642}
+  controller: {fileID: 0}
   shootOrigin: {fileID: 6504662194755680138}
-  gravity: -18.62
-  moveSpeed: 3.8
-  jumpSpeed: 6.2
-  jumpCooldown: 0.7
   throwForce: 550
   health: 0
   maxHealth: 100
@@ -63,24 +122,33 @@ MonoBehaviour:
   isJump: 0
   isJumpCooldown: 0
   isTool: 0
---- !u!143 &3706280240178001642
-CharacterController:
+--- !u!114 &6672595093092249237
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4306549827416917697}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Height: 1.889
-  m_Radius: 0.75
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.943, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f8dab2604184f140a4ef7acef895ad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2.3
+  airMultiplier: 0.4
+  walkSpeed: 2.3
+  sprintSpeed: 3.2
+  acceleration: 8
+  groundDrag: 6
+  airDrag: 0
+  jumpForce: 3
+  groundCheck: {fileID: 1500254469725387062}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  groundDistance: 0.2
+  isGrounded: 0
+  rb: {fileID: 8972451663113188159}
 --- !u!1 &5786540839377165896
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,6 +232,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4759721911903040, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529143413816529, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529143413816529, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

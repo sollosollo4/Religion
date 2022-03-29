@@ -48,16 +48,52 @@ public class TouchableStructures : MonoBehaviour
         if(GameManager.players[Client.instance.myId].CurrentWorkTool == null)
             GameManager.players[Client.instance.myId].CurrentWorkTool = Instantiate(TouchTool, GameManager.players[Client.instance.myId].ToolHand.transform);
 
+        Debug.Log($"Player start mining {PlayerManager.GetAnimationStateName(TouchEventName)}");
         ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId, PlayerManager.GetAnimationStateName(TouchEventName));
+    }
 
-        // ServerSend.
-        // здесь мы отправляем инфу, что начали копать
-        // НА СЕРВЕРЕ: запускаем курутину на MiningTime у этого объекта
-        // на сервере
+    public void StartMining(int _byPlayer)
+    {
+        if (GameManager.players[_byPlayer].CurrentWorkTool == null)
+            GameManager.players[_byPlayer].CurrentWorkTool = Instantiate(TouchTool, GameManager.players[_byPlayer].ToolHand.transform);
+        
+        GameManager.players[_byPlayer].SetWorkName(TouchEventName);
+        GameManager.players[_byPlayer].lastTouchableStructure = this;
+
+        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId, PlayerManager.GetAnimationStateName(TouchEventName));
     }
 
     public void EndMining()
     {
         Destroy(GameManager.players[Client.instance.myId].CurrentWorkTool);
+
+    }
+
+    public void EndMining(int _byPlayer)
+    {
+        Destroy(GameManager.players[_byPlayer].CurrentWorkTool);
+    }
+
+    public bool PlayerRaycast(Camera playerCamera)
+    {
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit _hit, 30f))
+        {
+            if (_hit.collider.TryGetComponent(out SpawnedGameObject _spawnedObject))
+            {
+                return _spawnedObject.spawnedObjectId == GetComponent<SpawnedGameObject>().spawnedObjectId;
+            }
+            else 
+                return false;
+        }
+        else
+            return false;
+    }
+
+    public void setHightLight(bool touch)
+    {
+        if (touch)
+            setHightLightActive();
+        else
+            setNormalLightActive();
     }
 }

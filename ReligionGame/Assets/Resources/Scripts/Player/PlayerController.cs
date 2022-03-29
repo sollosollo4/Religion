@@ -1,10 +1,18 @@
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     public Transform camTransform;
+
+    private float timer;
+
+    private void Start()
+    {
+        timer = 0.0f;
+    }
 
     private void Update()
     {
@@ -21,34 +29,41 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!ChatManager.isPlayerTypingMessage)
+        if (!ChatManager.isPlayerTypingMessage && !GameManager.players[Client.instance.myId].IsTool)
         {
-            SendInputToServer();
+            //SendInputToServer();
         }
     }
 
     /// <summary>Sends player input to the server.</summary>
     private void SendInputToServer()
     {
-        Dictionary<string, bool> _inputsMovementsAnimation = new Dictionary<string, bool>()
+        /*timer += Time.deltaTime;
+        while (timer >= Time.fixedDeltaTime)
         {
-            { "Forward", Input.GetKey(KeyCode.W) },
-            { "Backward", Input.GetKey(KeyCode.S) },
-            { "Left", Input.GetKey(KeyCode.A) },
-            { "Right", Input.GetKey(KeyCode.D) },
-            { "Jump", Input.GetKey(KeyCode.Space) }
-        };
+            timer -= Time.fixedDeltaTime;
+            Dictionary<string, bool> _inputsMovementsAnimation = new Dictionary<string, bool>()
+            {
+                { "Forward", Input.GetKey(KeyCode.W) },
+                { "Backward", Input.GetKey(KeyCode.S) },
+                { "Left", Input.GetKey(KeyCode.A) },
+                { "Right", Input.GetKey(KeyCode.D) },
+                { "Jump", Input.GetKey(KeyCode.Space) }
+            };
 
-        GameManager.players[Client.instance.myId].SetPlayerMovementStateAnimation(_inputsMovementsAnimation);
+            GameManager.players[Client.instance.myId].SetPlayerMovementStateAnimation(_inputsMovementsAnimation);
 
-        Dictionary<string, bool> _inputsWorkAnimation = new Dictionary<string, bool>()
-        {
-            { "UseTool", Input.GetKey(KeyCode.E) },
-        };
+            Dictionary<string, bool> _inputsWorkAnimation = new Dictionary<string, bool>()
+            {
+                { "UseTool", Input.GetKey(KeyCode.E) },
+            };
 
-        GameManager.players[Client.instance.myId].SetWork(_inputsWorkAnimation);
+            GameManager.players[Client.instance.myId].SetWork(_inputsWorkAnimation);
 
-        ClientSend.PlayerMovement(_inputsMovementsAnimation);
-        ClientSend.PlayerAnimation(GameManager.players[Client.instance.myId].animationState);
+            ClientSend.PlayerMovement(_inputsMovementsAnimation);
+            ClientSend.PlayerAnimation(GameManager.players[Client.instance.myId].animationState);
+
+            Physics.Simulate(Time.fixedDeltaTime);
+        }*/
     }
 }

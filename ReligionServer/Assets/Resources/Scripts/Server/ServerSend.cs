@@ -33,6 +33,7 @@ public class ServerSend
             Server.clients[i].tcp.SendData(_packet);
         }
     }
+
     /// <summary>Sends a packet to all clients except one via TCP.</summary>
     /// <param name="_exceptClient">The client to NOT send the data to.</param>
     /// <param name="_packet">The packet to send.</param>
@@ -87,22 +88,18 @@ public class ServerSend
             _packet.Write(_player.transform.position);
             _packet.Write(_player.transform.rotation);
 
-            SendTCPData(_toClient, _packet);
+            SendUDPData(_toClient, _packet);
         }
     }
 
-    /// <summary>Sends a player's updated position to all clients.</summary>
-    /// <param name="_player">The player whose position to update.</param>
-    public static void PlayerPosition(Player _player)
+    public static void PlayerPosition(int _id, StateMessage _message)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerPosition))
         {
-            _packet.Write(_player.id);
-            _packet.Write(_player.transform.position);
-            _packet.Write(_player.isJump);
-            _packet.Write(_player.isJumpCooldown);
-            _packet.Write(_player.isTool);
-
+            _packet.Write(_id);
+            _packet.Write(_message.position);
+            _packet.Write(_message.tick_number);
+            _packet.Write(_message.delivery_time);
             SendUDPDataToAll(_packet);
         }
     }
@@ -137,7 +134,7 @@ public class ServerSend
         {
             _packet.Write(_playerId);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -148,7 +145,7 @@ public class ServerSend
             _packet.Write(_player.id);
             _packet.Write(_player.health);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -158,7 +155,7 @@ public class ServerSend
         {
             _packet.Write(_player.id);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -170,7 +167,7 @@ public class ServerSend
             _packet.Write(_spawnerPosition);
             _packet.Write(_hasItem);
 
-            SendTCPData(_toClient, _packet);
+            SendUDPData(_toClient, _packet);
         }
     }
 
@@ -180,7 +177,7 @@ public class ServerSend
         {
             _packet.Write(_spawnerId);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -191,7 +188,7 @@ public class ServerSend
             _packet.Write(_spawnerId);
             _packet.Write(_byPlayer);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -203,7 +200,7 @@ public class ServerSend
             _packet.Write(_projectile.transform.position);
             _packet.Write(_thrownByPlayer);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -225,7 +222,7 @@ public class ServerSend
             _packet.Write(_projectile.id);
             _packet.Write(_projectile.transform.position);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -233,14 +230,15 @@ public class ServerSend
     {
         using (Packet _packet = new Packet((int)ServerPackets.spawnEnemy))
         {
-            SendTCPDataToAll(SpawnEnemy_Data(_enemy, _packet));
+            SendUDPDataToAll(SpawnEnemy_Data(_enemy, _packet));
         }
     }
+
     public static void SpawnEnemy(int _toClient, Enemy _enemy)
     {
         using (Packet _packet = new Packet((int)ServerPackets.spawnEnemy))
         {
-            SendTCPData(_toClient, SpawnEnemy_Data(_enemy, _packet));
+            SendUDPData(_toClient, SpawnEnemy_Data(_enemy, _packet));
         }
     }
 
@@ -251,7 +249,7 @@ public class ServerSend
         return _packet;
     }
 
-    internal static void SpawnStructure(object id, SpawnedGameObject spGameObj)
+    public static void SpawnStructure(object id, SpawnedGameObject spGameObj)
     {
         
     }
@@ -274,7 +272,7 @@ public class ServerSend
             _packet.Write(_enemy.id);
             _packet.Write(_enemy.health);
 
-            SendTCPDataToAll(_packet);
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -284,8 +282,8 @@ public class ServerSend
         {
             _packet.Write(_byPlayer);
             _packet.Write(_message);
-            
-            SendTCPDataToAll(_packet);
+
+            SendUDPDataToAll(_packet);
         }
     }
 
@@ -317,25 +315,40 @@ public class ServerSend
             _packet.Write(_newChar.CharacterName);
             _packet.Write(_newChar.CharacterClass.CharacterClassCode);
 
-            SendTCPData(_byPlayer, _packet);
+            SendUDPData(_byPlayer, _packet);
         }
     }
 
-    public static void PlayerCanUseTool(int _byPlayer, uint _instanceOjbject)
+    public static void PlayerTouchStructure(int _byPlayer, uint _instanceOjbject, bool _touch)
     {
-        using (Packet _packet = new Packet((int)ServerPackets.playerCanUseTool))
+        using (Packet _packet = new Packet((int)ServerPackets.playerTouchStructure))
         {
+            _packet.Write(_touch);
             _packet.Write(_instanceOjbject);
-            SendTCPData(_byPlayer, _packet);
+            SendUDPData(_byPlayer, _packet);
         }
     }
 
-    public static void PlayerRemoveUseTool(int _byPlayer, uint _instanceOjbject)
+    public static void PlayerStartMining(int _byPlayer, byte _animationId, uint _instanceOjbject)
     {
-        using (Packet _packet = new Packet((int)ServerPackets.playerRemoveUseTool))
+        using (Packet _packet = new Packet((int)ServerPackets.playerStartMining))
         {
+            _packet.Write(_byPlayer);
+            _packet.Write(_animationId);
             _packet.Write(_instanceOjbject);
-            SendTCPData(_byPlayer, _packet);
+
+            SendUDPDataToAll(_packet);
+        }
+    }
+
+    public static void PlayerEndMining(int _fromClient, uint _currentSpawnedObjectId /* сюда потом добавить то, что добыл и сколько*/)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerEndMining))
+        {
+            _packet.Write(_fromClient);
+            _packet.Write(_currentSpawnedObjectId);
+
+            SendUDPDataToAll(_packet);
         }
     }
     #endregion
