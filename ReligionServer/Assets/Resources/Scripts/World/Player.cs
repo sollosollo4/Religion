@@ -17,7 +17,11 @@ public class Player : MonoBehaviour
 
     public bool isJump;
     public bool isJumpCooldown;
+
     public bool isTool;
+
+    private bool[] inputs;
+    private float yVelocity = 0;
 
     public void Initialize(int _id, string _username)
     {
@@ -45,6 +49,7 @@ public class Player : MonoBehaviour
             }
         }
     }
+
 
     public void ThrowItem(Vector3 _viewDirection)
     {

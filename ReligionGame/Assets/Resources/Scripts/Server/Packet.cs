@@ -28,8 +28,7 @@ public enum ServerPackets
     playerCreateNewCharacter,
     playerAnimationState,
     playerTouchStructure,
-    playerEndMining,
-    playerStartMining
+    playerUnTouchStructure
 }
 
 /// <summary>Sent from client to server.</summary>

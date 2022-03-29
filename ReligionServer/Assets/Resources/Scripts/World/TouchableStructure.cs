@@ -40,6 +40,7 @@ public class TouchableStructure : MonoBehaviour
         yield return new WaitForSeconds(miningTime);
 
         Server.clients[_fromClient].player.isTool = false;
+
         uint currentSpawnedObjectId = GetComponent<SpawnedGameObject>().spawnedObjectId;
         ServerSend.PlayerEndMining(_fromClient, currentSpawnedObjectId);
     }

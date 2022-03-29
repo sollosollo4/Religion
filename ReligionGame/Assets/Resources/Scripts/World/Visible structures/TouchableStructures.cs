@@ -59,11 +59,14 @@ public class TouchableStructures : MonoBehaviour
         
         GameManager.players[_byPlayer].SetWorkName(TouchEventName);
         GameManager.players[_byPlayer].lastTouchableStructure = this;
+
+        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId, PlayerManager.GetAnimationStateName(TouchEventName));
     }
 
     public void EndMining()
     {
         Destroy(GameManager.players[Client.instance.myId].CurrentWorkTool);
+
     }
 
     public void EndMining(int _byPlayer)

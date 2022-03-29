@@ -104,9 +104,10 @@ public class ServerHandle
         byte _animationId = _packet.ReadByte();
 
         SpawnedGameObject touchableElement = UnityEngine.Object.FindObjectsOfType<SpawnedGameObject>().First(el => el.spawnedObjectId == _structureId);
+
+        touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
+
         Server.clients[_fromClient].player.isTool = true;
         Server.clients[_fromClient].player.animationState = _animationId;
-        touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
-        ServerSend.PlayerStartMining(_fromClient, _animationId, _structureId);
     }
 }

@@ -323,8 +323,7 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.playerCreateNewCharacter, ClientHandle.CreateNewCharacter },
             { (int)ServerPackets.playerAnimationState, ClientHandle.PlayerAnimationState },
             { (int)ServerPackets.playerTouchStructure, ClientHandle.PlayerTouchStructure },
-            { (int)ServerPackets.playerEndMining, ClientHandle.PlayerEndMining },
-            { (int)ServerPackets.playerStartMining, ClientHandle.PlayerStartMining }
+            { (int)ServerPackets.playerUnTouchStructure, ClientHandle.PlayerUnTouchStructure }
         };
         Debug.Log("Initialized packets.");
     }

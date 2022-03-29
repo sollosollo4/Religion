@@ -92,20 +92,6 @@ public class ServerSend
         }
     }
 
-    /// <summary>Sends a player's updated position to all clients.</summary>
-    /// <param name="_player">The player whose position to update.</param>
-    public static void PlayerPosition(Player _player)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.playerPosition))
-        {
-            _packet.Write(_player.id);
-            _packet.Write(_player.transform.position);
-            _packet.Write(_player.isTool);
-
-            SendUDPDataToAll(_packet);
-        }
-    }
-
     public static void PlayerPosition(int _id, StateMessage _message)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerPosition))
@@ -114,8 +100,6 @@ public class ServerSend
             _packet.Write(_message.position);
             _packet.Write(_message.tick_number);
             _packet.Write(_message.delivery_time);
-            
-
             SendUDPDataToAll(_packet);
         }
     }
