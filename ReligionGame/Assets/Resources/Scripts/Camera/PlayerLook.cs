@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class PlayerLook : MonoBehaviour
 
     [SerializeField] public Transform cameraPosition;
 
-    public float clampAngle = 90f;
+    public float clampAngle = 87f;
 
     float mouseX;
     float mouseY;
@@ -31,8 +32,30 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
-        Look();
-        Debug.DrawRay(transform.position, transform.forward * 2, Color.red);
+#if UNITY_EDITOR
+#else
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            CursorLock();
+        }
+
+        if(!Cursor.visible)
+        #endif
+            Look();
+    }
+
+    private void CursorLock()
+    {
+        if (Cursor.visible)
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     private void Look()

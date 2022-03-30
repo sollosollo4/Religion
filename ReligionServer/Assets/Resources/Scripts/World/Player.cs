@@ -6,22 +6,15 @@ public class Player : MonoBehaviour
 {
     public int id;
     public string username;
-    public CharacterController controller;
     public Transform shootOrigin;
     public float throwForce = 600f;
     public float health;
     public float maxHealth = 100f;
     public int itemAmount = 0;
     public int maxItemAmount = 3;
-    public byte animationState = 0;
 
     public bool isJump;
-    public bool isJumpCooldown;
-
     public bool isTool;
-
-    private bool[] inputs;
-    private float yVelocity = 0;
 
     public void Initialize(int _id, string _username)
     {
@@ -76,9 +69,7 @@ public class Player : MonoBehaviour
         if (health <= 0f)
         {
             health = 0f;
-            controller.enabled = false;
             transform.position = new Vector3(330f, 18f, 330f);
-            ServerSend.PlayerPosition(this);
             StartCoroutine(Respawn());
         }
 
@@ -90,7 +81,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(3f);
 
         health = maxHealth;
-        controller.enabled = true;
         ServerSend.PlayerRespawned(this);
     }
 

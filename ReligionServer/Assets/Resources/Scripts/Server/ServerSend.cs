@@ -106,25 +106,14 @@ public class ServerSend
 
     /// <summary>Sends a player's updated rotation to all clients except to himself (to avoid overwriting the local player's rotation).</summary>
     /// <param name="_player">The player whose rotation to update.</param>
-    public static void PlayerRotation(Player _player)
+    public static void PlayerRotation(int _id, float _camRotation)
     {
         using (Packet _packet = new Packet((int)ServerPackets.playerRotation))
         {
-            _packet.Write(_player.id);
-            _packet.Write(_player.transform.rotation);
+            _packet.Write(_id);
+            _packet.Write(_camRotation);
 
-            SendUDPDataToAll(_player.id, _packet);
-        }
-    }
-
-    public static void PlayerAnimationState(Player _player)
-    {
-        using (Packet _packet = new Packet((int)ServerPackets.playerState))
-        {
-            _packet.Write(_player.id);
-            _packet.Write(_player.animationState);
-
-            SendUDPDataToAll(_player.id, _packet);
+            SendUDPDataToAll(_id, _packet);
         }
     }
 
@@ -334,7 +323,6 @@ public class ServerSend
         using (Packet _packet = new Packet((int)ServerPackets.playerStartMining))
         {
             _packet.Write(_byPlayer);
-            _packet.Write(_animationId);
             _packet.Write(_instanceOjbject);
 
             SendUDPDataToAll(_packet);

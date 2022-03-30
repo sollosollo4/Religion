@@ -321,9 +321,7 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.chatMessage, ClientHandle.CreateChatMessage },
             { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection },
             { (int)ServerPackets.playerCreateNewCharacter, ClientHandle.CreateNewCharacter },
-            { (int)ServerPackets.playerAnimationState, ClientHandle.PlayerAnimationState },
             { (int)ServerPackets.playerTouchStructure, ClientHandle.PlayerTouchStructure },
-            { (int)ServerPackets.playerUnTouchStructure, ClientHandle.PlayerUnTouchStructure }
         };
         Debug.Log("Initialized packets.");
     }

@@ -63,16 +63,6 @@ public class ClientSend : MonoBehaviour
             SendUDPData(_packet);
         }
     }
-    
-    public static void PlayerAnimation(int animationState)
-    {
-        using (Packet _packet = new Packet((int)ClientPackets.animationState))
-        {
-            _packet.Write(GameManager.players[Client.instance.myId].animationState);
-
-            SendUDPData(_packet);
-        }
-    }
 
     public static void CreateNewCharater(string _characterName, string _className)
     {
@@ -85,12 +75,11 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void PlayerUseTool(uint _spawnableObjectid, byte _animationState)
+    public static void PlayerUseTool(uint _spawnableObjectid)
     {
         using (Packet _packet = new Packet((int)ClientPackets.playerUseTool))
         {
             _packet.Write(_spawnableObjectid);
-            _packet.Write(_animationState);
 
             SendUDPData(_packet);
         }

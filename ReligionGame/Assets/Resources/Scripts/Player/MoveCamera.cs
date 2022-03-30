@@ -6,7 +6,7 @@ public class MoveCamera : MonoBehaviour
 {
     public Transform cameraPosition = null;
 
-    public float Euler = 0.3f;
+    public float Euler = 0.2f;
 
     private void Start()
     {

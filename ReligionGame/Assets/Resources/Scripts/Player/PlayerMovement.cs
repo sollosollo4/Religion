@@ -222,6 +222,9 @@ public class PlayerMovement : MonoBehaviour
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         verticalMovement = Input.GetAxisRaw("Vertical");
 
+        GetComponentInChildren<Animator>().SetFloat("horizontal", horizontalMovement);
+        GetComponentInChildren<Animator>().SetFloat("vertical", verticalMovement);
+
         moveDirection = GetComponent<PlayerLook>().orientation.forward * verticalMovement + GetComponent<PlayerLook>().orientation.right * horizontalMovement;
     }
 

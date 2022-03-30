@@ -51,6 +51,18 @@ public class ClientHandle : MonoBehaviour
             }
             else
             {
+                Vector3 _posCheck = (_position - _player.transform.position).normalized;
+                if (_posCheck.x != _posCheck.z) 
+                {
+                    _player.animator.SetFloat("horizontal", _posCheck.x);
+                    _player.animator.SetFloat("vertical", _posCheck.z);
+                }
+                else
+                {
+                    _player.animator.SetFloat("horizontal", 0);
+                    _player.animator.SetFloat("vertical", 0);
+                }
+
                 _player.transform.position = Vector3.Lerp(_player.transform.position, _position, 0.19f);
             }
             
@@ -60,11 +72,13 @@ public class ClientHandle : MonoBehaviour
     public static void PlayerRotation(Packet _packet)
     {
         int _id = _packet.ReadInt();
-        Quaternion _rotation = _packet.ReadQuaternion();
-
-        if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
+        float _rotation = _packet.ReadFloat();
+        if (_id != Client.instance.myId)
         {
-            //_player.transform.rotation = _rotation;
+            if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
+            {
+                _player.transform.rotation = Quaternion.Lerp(_player.transform.rotation, Quaternion.Euler(0f, _rotation, 0f), 0.2f);
+            }
         }
     }
 
@@ -201,18 +215,6 @@ public class ClientHandle : MonoBehaviour
         }
     }
 
-    public static void PlayerAnimationState(Packet _packet)
-    {
-        int _id = _packet.ReadInt();
-        byte _state = _packet.ReadByte();
-
-        
-        if (GameManager.players.TryGetValue(_id, out PlayerManager _playerManager))
-        {
-            _playerManager.SetState(_state);
-        }
-    }
-
     public static void PlayerTouchStructure(Packet _packet)
     {
         bool _touch = _packet.ReadBool();
@@ -226,7 +228,6 @@ public class ClientHandle : MonoBehaviour
     public static void PlayerStartMining(Packet _packet)
     {
         int _fromClient = _packet.ReadInt();
-        byte _animationId = _packet.ReadByte();
         uint _touchableObjectId = _packet.ReadUint();
 
         if (GameManager.players.TryGetValue(_fromClient, out PlayerManager player))
@@ -235,7 +236,6 @@ public class ClientHandle : MonoBehaviour
             {
                 player.IsTool = true;
                 spawn.GetComponent<TouchableStructures>().StartMining(_fromClient);
-                player.SetState(_animationId);
             }
         }
     }

@@ -31,17 +31,14 @@ public class PlayerController : MonoBehaviour
     {
         if (!ChatManager.isPlayerTypingMessage && !GameManager.players[Client.instance.myId].IsTool)
         {
-            //SendInputToServer();
+            SendInputToServer();
         }
     }
 
     /// <summary>Sends player input to the server.</summary>
     private void SendInputToServer()
     {
-        /*timer += Time.deltaTime;
-        while (timer >= Time.fixedDeltaTime)
-        {
-            timer -= Time.fixedDeltaTime;
+        /*
             Dictionary<string, bool> _inputsMovementsAnimation = new Dictionary<string, bool>()
             {
                 { "Forward", Input.GetKey(KeyCode.W) },
@@ -62,8 +59,6 @@ public class PlayerController : MonoBehaviour
 
             ClientSend.PlayerMovement(_inputsMovementsAnimation);
             ClientSend.PlayerAnimation(GameManager.players[Client.instance.myId].animationState);
-
-            Physics.Simulate(Time.fixedDeltaTime);
-        }*/
+        */
     }
 }

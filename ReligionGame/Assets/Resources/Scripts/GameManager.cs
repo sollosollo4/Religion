@@ -60,13 +60,15 @@ public class GameManager : MonoBehaviour
             _player = Instantiate(localPlayerPrefab, _position, _rotation);
             moveCamera.cameraPosition = _player.GetComponent<PlayerLook>().cameraPosition;
             _player.GetComponent<PlayerLook>().cam = moveCamera.transform;
+            _player.GetComponent<PlayerManager>().InitializeLocale(_id, _username);
         }
         else
         {
             _player = Instantiate(playerPrefab, _position, _rotation);
+            _player.GetComponent<PlayerManager>().Initialize(_id, _username);
         }
 
-        _player.GetComponent<PlayerManager>().Initialize(_id, _username);
+        
         players.Add(_id, _player.GetComponent<PlayerManager>());
     }
 

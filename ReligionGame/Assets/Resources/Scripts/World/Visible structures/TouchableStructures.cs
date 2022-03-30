@@ -48,8 +48,7 @@ public class TouchableStructures : MonoBehaviour
         if(GameManager.players[Client.instance.myId].CurrentWorkTool == null)
             GameManager.players[Client.instance.myId].CurrentWorkTool = Instantiate(TouchTool, GameManager.players[Client.instance.myId].ToolHand.transform);
 
-        Debug.Log($"Player start mining {PlayerManager.GetAnimationStateName(TouchEventName)}");
-        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId, PlayerManager.GetAnimationStateName(TouchEventName));
+        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId);
     }
 
     public void StartMining(int _byPlayer)
@@ -60,7 +59,7 @@ public class TouchableStructures : MonoBehaviour
         GameManager.players[_byPlayer].SetWorkName(TouchEventName);
         GameManager.players[_byPlayer].lastTouchableStructure = this;
 
-        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId, PlayerManager.GetAnimationStateName(TouchEventName));
+        ClientSend.PlayerUseTool(GetComponent<SpawnedGameObject>().spawnedObjectId);
     }
 
     public void EndMining()

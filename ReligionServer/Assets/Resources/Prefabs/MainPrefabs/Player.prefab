@@ -111,16 +111,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   username: 
-  controller: {fileID: 0}
   shootOrigin: {fileID: 6504662194755680138}
   throwForce: 550
   health: 0
   maxHealth: 100
   itemAmount: 900
   maxItemAmount: 900
-  animationState: 0
   isJump: 0
-  isJumpCooldown: 0
   isTool: 0
 --- !u!114 &6672595093092249237
 MonoBehaviour:
@@ -137,7 +134,7 @@ MonoBehaviour:
   moveSpeed: 2.3
   airMultiplier: 0.4
   walkSpeed: 2.3
-  sprintSpeed: 3.2
+  sprintSpeed: 4.6
   acceleration: 8
   groundDrag: 6
   airDrag: 0
@@ -146,7 +143,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 8
-  groundDistance: 0.2
+  groundDistance: 0.1
   isGrounded: 0
   rb: {fileID: 8972451663113188159}
 --- !u!1 &5786540839377165896

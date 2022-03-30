@@ -57,6 +57,7 @@ public class PlayerPhysics : MonoBehaviour
     public void SetInput(InputMessage _inputMessage)
     {
         server_input_msgs.Enqueue(_inputMessage);
+        ServerSend.PlayerRotation(GetComponent<Player>().id, _inputMessage.camRotation);
     }
        
     private bool ServerHasInputMessage()
@@ -102,8 +103,6 @@ public class PlayerPhysics : MonoBehaviour
                     state_msg.delivery_time = Time.time;
                     state_msg.tick_number = server_tick_number;
                     state_msg.position = rb.position;
-                    //state_msg.velocity = rb.velocity;
-                    //state_msg.angular_velocity = rb.angularVelocity;
                     ServerSend.PlayerPosition(GetComponent<Player>().id, state_msg);
 
                     transform.position = rb.position;

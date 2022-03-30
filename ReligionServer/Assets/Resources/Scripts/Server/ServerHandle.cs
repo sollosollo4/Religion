@@ -93,21 +93,14 @@ public class ServerHandle
         ServerSend.CreateNewCharacter(_fromClient, newChar, isCreated);
     }
 
-    public static void AnimationState(int _fromClient, Packet _packet)
-    {
-        Server.clients[_fromClient].player.animationState = _packet.ReadByte();
-    }
-
     public static void PlayerUseTool(int _fromClient, Packet _packet)
     {
         uint _structureId = _packet.ReadUint();
-        byte _animationId = _packet.ReadByte();
 
         SpawnedGameObject touchableElement = UnityEngine.Object.FindObjectsOfType<SpawnedGameObject>().First(el => el.spawnedObjectId == _structureId);
 
         touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
 
         Server.clients[_fromClient].player.isTool = true;
-        Server.clients[_fromClient].player.animationState = _animationId;
     }
 }

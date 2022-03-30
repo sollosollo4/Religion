@@ -16,6 +16,8 @@ public class MainMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if UNITY_EDITOR
+#else
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isOpen)
@@ -23,6 +25,7 @@ public class MainMenuManager : MonoBehaviour
             else
                 OpenMainMenu();
         }
+#endif
     }
 
     public void OpenMainMenu()
