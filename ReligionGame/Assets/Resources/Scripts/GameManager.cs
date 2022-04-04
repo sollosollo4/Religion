@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        Physics.IgnoreLayerCollision(8, 8);
         MainScene = SceneManager.GetActiveScene();
     }
 

@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public GameObject CrosshairGameObject;
     public GameObject MainMenu;
 
     private bool isOpen;
     // Start is called before the first frame update
     void Start()
     {
+        MainMenu.SetActive(false);
     }
 
     // Update is called once per frame
@@ -31,14 +31,14 @@ public class MainMenuManager : MonoBehaviour
     public void OpenMainMenu()
     {
         MainMenu.gameObject.SetActive(true);
-        CrosshairGameObject.SetActive(false);
+        UIManager.instance.CrosshairGameObject.SetActive(false);
         isOpen = true;
     }
 
     public void CloseMainMenu()
     {
         MainMenu.gameObject.SetActive(false);
-        CrosshairGameObject.SetActive(true);
+        UIManager.instance.CrosshairGameObject.SetActive(true);
         isOpen = false;
     }
 

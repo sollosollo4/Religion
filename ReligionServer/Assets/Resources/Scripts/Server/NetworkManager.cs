@@ -31,6 +31,7 @@ public class NetworkManager : MonoBehaviour
     {
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 30;
+        Physics.IgnoreLayerCollision(6, 6);
 
         Server.Start(5, 26950);
     }

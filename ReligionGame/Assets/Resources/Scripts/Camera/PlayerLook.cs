@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 
 public class PlayerLook : MonoBehaviour
@@ -32,6 +33,7 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
+
 #if UNITY_EDITOR
 #else
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -40,8 +42,8 @@ public class PlayerLook : MonoBehaviour
         }
 
         if(!Cursor.visible)
-        #endif
-            Look();
+#endif
+        Look();
     }
 
     private void CursorLock()

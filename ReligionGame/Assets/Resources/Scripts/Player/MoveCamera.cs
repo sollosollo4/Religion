@@ -6,7 +6,7 @@ public class MoveCamera : MonoBehaviour
 {
     public Transform cameraPosition = null;
 
-    public float Euler = 0.2f;
+    public float Euler = 10f;
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class MoveCamera : MonoBehaviour
     {
         if (cameraPosition != null)
         {
-            transform.position = Vector3.Lerp(transform.position, cameraPosition.position, Euler);
+            transform.position = Vector3.Lerp(transform.position, cameraPosition.position, Time.deltaTime*Euler);
         }
     }
 }

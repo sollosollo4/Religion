@@ -7,11 +7,9 @@ public class PlayerController : MonoBehaviour
 {
     public Transform camTransform;
 
-    private float timer;
-
     private void Start()
     {
-        timer = 0.0f;
+        camTransform = GameManager.instance.moveCamera.transform;
     }
 
     private void Update()
@@ -24,6 +22,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             ClientSend.PlayerThrowItem(camTransform.forward);
+        }
+
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            UIManager.instance.OpenInventory();
         }
     }
 

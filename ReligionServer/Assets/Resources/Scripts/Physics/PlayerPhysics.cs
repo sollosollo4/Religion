@@ -57,7 +57,6 @@ public class PlayerPhysics : MonoBehaviour
     public void SetInput(InputMessage _inputMessage)
     {
         server_input_msgs.Enqueue(_inputMessage);
-        ServerSend.PlayerRotation(GetComponent<Player>().id, _inputMessage.camRotation);
     }
        
     private bool ServerHasInputMessage()
@@ -81,7 +80,7 @@ public class PlayerPhysics : MonoBehaviour
 
             // если этот тик больше или равен текущему тику, на котором мы находимся, то он
             // имеет новые входные данные
-            Debug.Log("Ticks: " + max_tick + " - " + server_tick_number + ". Count:" + server_input_msgs.Count);
+            //Debug.Log("Ticks: " + max_tick + " - " + server_tick_number + ". Count:" + server_input_msgs.Count);
 
             if (max_tick >= server_tick_number)
             {

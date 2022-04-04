@@ -38,6 +38,7 @@ public class ServerHandle
         inputMsg.start_tick_number = _packet.ReadUint();
 
         Server.clients[_fromClient].player.GetComponent<PlayerPhysics>().SetInput(inputMsg);
+        ServerSend.PlayerRotation(_fromClient, inputMsg.camRotation);
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)

@@ -77,7 +77,7 @@ public class ClientHandle : MonoBehaviour
         {
             if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
             {
-                _player.transform.rotation = Quaternion.Lerp(_player.transform.rotation, Quaternion.Euler(0f, _rotation, 0f), 0.2f);
+                _player.transform.rotation = Quaternion.Euler(0f, _rotation, 0f);
             }
         }
     }

@@ -10,9 +10,12 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
 
+    public GameObject CrosshairGameObject;
+
     public GameObject ChatPanel;
     public GameObject gameMenu;
     public GameObject toolPanel;
+    public GameObject inventoryPanel;
 
     private void Awake()
     {
@@ -25,5 +28,12 @@ public class UIManager : MonoBehaviour
             Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
+    }
+
+    public void OpenInventory()
+    {
+        inventoryPanel.SetActive(!inventoryPanel.activeSelf);
+        inventoryPanel.GetComponent<Inventory>().IsOpen = inventoryPanel.activeSelf;
+        CrosshairGameObject.SetActive(!CrosshairGameObject.activeSelf);
     }
 }

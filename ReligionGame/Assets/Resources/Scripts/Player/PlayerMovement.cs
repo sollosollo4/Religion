@@ -77,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        Physics.IgnoreLayerCollision(6, 6);
 
         client_timer = 0.0f;
         client_tick_number = 0;
@@ -131,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
             input_msg.delivery_time = Time.time;
             input_msg.start_tick_number = client_last_received_state_tick;
             input_msg.inputs = new List<Inputs>();
-            input_msg.camRotation = GetComponent<PlayerLook>().orientation.rotation.y;
+            input_msg.camRotation = GetComponent<PlayerLook>().orientation.rotation.eulerAngles.y;
 
             for (uint tick = input_msg.start_tick_number; tick <= client_tick_number; ++tick)
             {
