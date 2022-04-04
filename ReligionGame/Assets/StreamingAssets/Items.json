@@ -1,44 +1,71 @@
 [
 	{
 		"id": 0,
-		"title": "Steel Gloves",
-		"value": 6,
-		"stats": {
-			"power": 1,
-			"defense": 4,
-			"vitality": 2
+		"title": {
+			"en": "Common Pickaxe",
+			"ru": "Кирка"
 		},
-		"description": "Gloves made from steel. Yea.",
+		"value": 0,
+		"stats": {
+			"strength": 0,
+			"intellect": 0,
+			"dexterity": 0,
+			"endurance": 0,
+			"memoryspirit": 0,
+			"wisdom": 0
+		},
+		"description": {
+			"en": "it looks like you can get some ore",
+			"ru": "кажется этим можно добыть немного руды"
+		},
 		"stackable": false,
-		"rarity": 2,
-		"slug":  "steel-gloves"
+		"rarity": 0,
+		"slug":  "pickaxe1"
 	},
 	{
 		"id": 1,
-		"title": "The Great Stick",
-		"value": 543,
-		"stats": {
-			"power": 56,
-			"defense": 2,
-			"vitality": 54
+		"title": {
+			"en": "Bronze coin",
+			"ru": "Бронзовая монета"
 		},
-		"description": "It's a stick that's pretty great.",
+		"value": 1,
+		"stats": {
+			"strength": 0,
+			"intellect": 0,
+			"dexterity": 0,
+			"endurance": 0,
+			"memoryspirit": 0,
+			"wisdom": 0
+		},
+		"description": {
+			"en": "Lesser currency <i>Religion</i>",
+			"ru": "Меньшая валюта <i>Religion</i>"
+		},
 		"stackable": true,
-		"rarity": 6,
-		"slug": "the-great-stick"
+		"rarity": 1,
+		"slug":  "money0"
 	},
 	{
 		"id": 2,
-		"title": "The Golden Sword",
-		"value": 234,
-		"stats": {
-			"power": 200,
-			"defense": 100,
-			"vitality": 150
+		"title": {
+			"en": "Note with something",
+			"ru": "Какая-та записка"
 		},
-		"description": "This is the best weapon.",
+		"value": 0,
+		"stats": {
+			"strength": 0,
+			"intellect": 0,
+			"dexterity": 0,
+			"endurance": 0,
+			"memoryspirit": 0,
+			"wisdom": 0
+		},
+		"description": {
+			"en": "On this piece of paper, it is written that you must <b>find a certain house in this forest</b>. Sounds like you're ready to learn something new..",
+			"ru": "На этом клочке бумаги, написано, что <b>вы должны найти некий домик в этом лесу</b>. Кажется вы готовы к изучению нового.."
+		},
 		"stackable": false,
 		"rarity": 6,
-		"slug":  "golden-sword"
+		"slug":  "quest0"
 	}
 ]
