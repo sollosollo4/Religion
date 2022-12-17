@@ -36,7 +36,7 @@ public class Tooltip : MonoBehaviour
 
 	public void ConstructDataString()
 	{
-		data = $"<color={Item.ColorToHex(item.colors[item.Rarity])}><b>{item.Title}</b></color>\n\n" +
+		data = $"<b><color={Item.ColorToHex(item.colors[item.Rarity])}>{item.Title}</color></b>\n\n" +
 			$"{item.Description}\n\n" +
 			$"{item.getCharactersDescription()}\n"+
 			$"GearScore: {item.GearScore}";

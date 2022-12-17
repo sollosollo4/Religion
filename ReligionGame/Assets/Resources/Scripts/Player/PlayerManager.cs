@@ -16,6 +16,7 @@ public class PlayerManager : MonoBehaviour
     public Animator animator;
 
     public bool IsTool;
+    public bool IsSprint;
 
     public string WorkTouchName;
     public TouchableStructures lastTouchableStructure;

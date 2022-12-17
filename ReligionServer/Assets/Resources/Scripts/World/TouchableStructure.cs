@@ -42,7 +42,7 @@ public class TouchableStructure : MonoBehaviour
         Server.clients[_fromClient].player.isTool = false;
 
         uint currentSpawnedObjectId = GetComponent<SpawnedGameObject>().spawnedObjectId;
-        ServerSend.PlayerEndMining(_fromClient, currentSpawnedObjectId);
+        ServerSend.PlayerUnTouchStructure(_fromClient, currentSpawnedObjectId);
     }
 }
 

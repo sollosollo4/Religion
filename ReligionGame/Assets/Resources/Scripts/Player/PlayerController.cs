@@ -16,17 +16,12 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            ClientSend.PlayerShoot(camTransform.forward);
+            ClientSend.PlayerShoot(camTransform.forward * 4f);
         }
 
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
-            ClientSend.PlayerThrowItem(camTransform.forward);
-        }
-
-        if(Input.GetKeyDown(KeyCode.B))
-        {
-            UIManager.instance.OpenInventory();
+            ClientSend.PlayerThrowItem(camTransform.forward * 4f);
         }
     }
 

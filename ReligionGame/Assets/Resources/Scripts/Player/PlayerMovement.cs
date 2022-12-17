@@ -8,24 +8,24 @@ using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
-    float playerHeight = 1.7f;
-
+    public float playerHeight = 1.9f;
+    public bool isSprint;
     [Header("Movement")]
-    [SerializeField] float moveSpeed = 6f;
-    [SerializeField] float airMultiplier = 0.4f;
-    float movementMultiplier = 10f;
+    [SerializeField] public float moveSpeed = 6f;
+    [SerializeField] public float airMultiplier = 0.4f;
 
     [Header("Sprinting")]
-    [SerializeField] float walkSpeed = 4f;
-    [SerializeField] float sprintSpeed = 6f;
-    [SerializeField] float acceleration = 10f;
+    [SerializeField] public float walkSpeed = 4f;
+    [SerializeField] public float sprintSpeed = 6f;
+    [SerializeField] public float movementMultiplier = 10f;
 
     [Header("Drag")]
-    [SerializeField] float groundDrag = 6f;
-    [SerializeField] float airDrag = 2f;
+    [SerializeField] public float groundDrag = 6f;
+    [SerializeField] public float airDrag = 2f;
 
     [Header("Jumping")]
     public float jumpForce = 5f;
+    public float jumpCooldown = 1.5f;
 
     [Header("Keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
@@ -38,76 +38,58 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.2f;
-    bool isGrounded;
+    public bool isGrounded;
 
     Vector3 moveDirection;
     Vector3 slopeMoveDirection;
 
-    Rigidbody rb;
+    public Rigidbody rb;
 
-    RaycastHit slopeHit;
+    public RaycastHit slopeHit;
 
     private float client_timer;
     private uint client_tick_number;
     private uint client_last_received_state_tick;
-    private const int c_client_buffer_size = 2048;
+    private const int c_client_buffer_size = 8192;
     private ClientState[] client_state_buffer; // здесь клиент хранит предсказанные ходы
     private Inputs[] client_input_buffer; // клиент хранит прогнозируемые входные данные здесь
     private Queue<StateMessage> client_state_msgs;
-    private Vector3 client_pos_error;
-    private bool isJump;
 
-    private bool OnSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight / 2 + 0.5f))
-        {
-            if (slopeHit.normal != Vector3.up)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        return false;
-    }
+    private Commands[] client_command_buffer; // клиент хранит прогнозируемые входные данные здесь
+
+    private bool isJump;
+    private float canJump = 0f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        Physics.IgnoreLayerCollision(6, 6);
+        Physics.IgnoreLayerCollision(8, 8); // ignore players <-> players collisions touchs
 
         client_timer = 0.0f;
         client_tick_number = 0;
         client_last_received_state_tick = 0;
         client_state_buffer = new ClientState[c_client_buffer_size];
         client_input_buffer = new Inputs[c_client_buffer_size];
+        client_command_buffer = new Commands[c_client_buffer_size];
         client_state_msgs = new Queue<StateMessage>();
-        client_pos_error = Vector3.zero;
     }
 
     private void Update()
     {
+        Animations();
+
         // проверяем на почве ли мы
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
-        // рассчитываем движение
-        MyInput();
         // падение
-        ControlDrag();
+        ControlDrag(); // just a control
+
         // ускоряемся ли?
-        ControlSpeed();
-        // обрабатываем прыжок
-        if (Input.GetKeyDown(jumpKey) && isGrounded)
-        {
-            isJump = true;
-        }
+        ControlSpeed(); // just a speed control
+    }
 
-        // рассчитываем склоны
-        slopeMoveDirection = Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
-
+    void FixedUpdate()
+    {
         float dt = Time.fixedDeltaTime;
         float client_timer = this.client_timer;
         uint client_tick_number = this.client_tick_number;
@@ -116,41 +98,30 @@ public class PlayerMovement : MonoBehaviour
         while (client_timer >= dt)
         {
             client_timer -= dt;
-
             uint buffer_slot = client_tick_number % c_client_buffer_size;
 
-            // выборка и сохранение входных данных для этого тика
-            Inputs inputs;
-            inputs.moveD = moveDirection;
-            inputs.slopeD = slopeMoveDirection;
-            inputs.jump = isJump;
-            inputs.sprint = Input.GetKey(sprintKey);
-            client_input_buffer[buffer_slot] = inputs;
+            // рассчитываем движение
+            Commands moveCommand = MyInput();
+
+            client_command_buffer[buffer_slot] = moveCommand;
 
             // отправить входной пакет на сервер
-            InputMessage input_msg;
-            input_msg.delivery_time = Time.time;
+            CommandMessage input_msg;
             input_msg.start_tick_number = client_last_received_state_tick;
-            input_msg.inputs = new List<Inputs>();
-            input_msg.camRotation = GetComponent<PlayerLook>().orientation.rotation.eulerAngles.y;
+            input_msg.inputs = new List<Commands>();
 
             for (uint tick = input_msg.start_tick_number; tick <= client_tick_number; ++tick)
             {
-                input_msg.inputs.Add(client_input_buffer[tick % c_client_buffer_size]);
+                input_msg.inputs.Add(client_command_buffer[tick % c_client_buffer_size]);
             }
 
             // сохранить состояние для этого тика, затем использовать текущее состояние + ввод для пошаговой симуляции
-            ClientStoreCurrentStateAndStep(
-                ref client_state_buffer[buffer_slot],
-                rb,
-                inputs,
-                dt);
+            ClientStoreCurrentStateAndStep(ref client_state_buffer[buffer_slot], rb, moveCommand, dt);
 
             ClientSend.PlayerMovement(input_msg);
 
             ++client_tick_number;
         }
-
         this.client_timer = client_timer;
         this.client_tick_number = client_tick_number;
 
@@ -166,112 +137,130 @@ public class PlayerMovement : MonoBehaviour
 
             uint buffer_slot = state_msg.tick_number % c_client_buffer_size;
             Vector3 position_error = state_msg.position - client_state_buffer[buffer_slot].position;
-
+            
             if (position_error.sqrMagnitude > 0.0000001f)
             {
                 //Debug.Log("Correcting for error at tick " + state_msg.tick_number + " (rewinding " + (client_tick_number - state_msg.tick_number) + " ticks)");
 
-                // захватить текущую прогнозируемую позицию для сглаживания
-                //Vector3 prev_pos = rb.position + client_pos_error;
-
                 // перемотать и воспроизвести
                 rb.position = state_msg.position;
-                //rb.velocity = state_msg.velocity;
-                //rb.angularVelocity = state_msg.angular_velocity;
 
                 uint rewind_tick_number = state_msg.tick_number;
                 while (rewind_tick_number < client_tick_number)
                 {
                     buffer_slot = rewind_tick_number % c_client_buffer_size;
-                    ClientStoreCurrentStateAndStep(
-                        ref client_state_buffer[buffer_slot],
+
+                    ClientStateStep(
                         rb,
-                        client_input_buffer[buffer_slot],
+                        client_command_buffer[buffer_slot],
                         dt);
 
                     ++rewind_tick_number;
                 }
-
-                // если разница больше 2 мс, просто щелкнуть
-                /*if ((prev_pos - rb.position).sqrMagnitude >= 4.0f)
-                {
-                    client_pos_error = Vector3.zero;
-                }
-                else
-                {
-                    client_pos_error = prev_pos - rb.position;
-                }*/
             }
         }
 
-        //client_pos_error *= 0.9f;
+        transform.position = rb.position;
+    }
 
-        transform.position = Vector3.Lerp(transform.position, rb.position, 0.2f);
+    public bool isDragSystem;
 
-        if (Time.unscaledTime > _timer)
+    void Animations()
+    {
+        GetComponent<PlayerManager>().animator.SetBool("isSprint", isSprint);
+
+        if (!isGrounded)
         {
-            fps = (int)(1f / Time.deltaTime);
-            _timer = Time.unscaledTime + 1;
+            GetComponent<PlayerManager>().animator.SetBool("isGrounded", false);
+            GetComponent<PlayerManager>().animator.SetFloat("velocityY", Mathf.Sign(rb.velocity.y));
+        }
+
+        if (isGrounded)
+        {
+            GetComponent<PlayerManager>().animator.SetBool("isGrounded", true);
+            GetComponent<PlayerManager>().animator.SetFloat("velocityY", 0);
         }
     }
 
-    int fps;
-    float _timer;
-
-    void MyInput()
+    Commands MyInput()
     {
+        Commands command = new Commands();
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         verticalMovement = Input.GetAxisRaw("Vertical");
 
         GetComponentInChildren<Animator>().SetFloat("horizontal", horizontalMovement);
         GetComponentInChildren<Animator>().SetFloat("vertical", verticalMovement);
+        
+        command.moveHorizontal = Convert.ToSByte(horizontalMovement);
+        command.moveVertical = Convert.ToSByte(verticalMovement);
+        command.sprint = Input.GetKey(sprintKey);
+        
+        if (Input.GetKey(jumpKey) && isGrounded)
+        {
+            command.jump = true;
+            isJump = true;
+        }
 
-        moveDirection = GetComponent<PlayerLook>().orientation.forward * verticalMovement + GetComponent<PlayerLook>().orientation.right * horizontalMovement;
+        command.orientation = Convert.ToInt16(GetComponent<PlayerLook>().orientation.eulerAngles.y);
+
+        return command;
     }
 
     void ControlSpeed()
     {
         if (Input.GetKey(sprintKey) && isGrounded)
         {
-            moveSpeed = sprintSpeed;
+            isSprint = true;
         }
         else
         {
-            moveSpeed = walkSpeed;
+            isSprint = false;
+        }
+        GetComponent<PlayerManager>().IsSprint = isSprint;
+    }
+
+    public void ControlDrag()
+    {
+        if (isDragSystem)
+        {
+            if (isGrounded)
+            {
+                rb.drag = groundDrag;
+            }
+            else
+            {
+                rb.drag = airDrag;
+            }
         }
     }
 
-    void ControlDrag()
+    public bool OnSlope()
     {
-        if (isGrounded)
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight / 2 + 0.5f))
         {
-            rb.drag = groundDrag;
+            if (slopeHit.normal != Vector3.up)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        else
-        {
-            rb.drag = airDrag;
-        }
+        return false;
     }
 
-    void MovePlayer(Inputs inputs)
+    void MovePlayer(Commands inputs)
     {
-        if (isGrounded && !OnSlope())
-        {
-            rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);
+        MoveHZCommand gog = new MoveHZCommand();
+        gog.execute(this, inputs);
+        
+
+        if(inputs.jump) {
+            JumpCommand go = new JumpCommand();
+            go.execute(this, inputs);
         }
-        else if (isGrounded && OnSlope())
-        {
-            rb.AddForce(slopeMoveDirection.normalized * moveSpeed * movementMultiplier, ForceMode.Acceleration);
-        }
-        else if (!isGrounded)
-        {
-            rb.AddForce(moveDirection.normalized * moveSpeed * movementMultiplier * airMultiplier, ForceMode.Acceleration);
-        }
-        else if(isGrounded && inputs.jump)
-        {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddForce(transform.up * jumpForce, ForceMode.Acceleration);
-        }
+        
     }
 
     public void SetStateMessages(StateMessage _stateMessage)
@@ -284,7 +273,7 @@ public class PlayerMovement : MonoBehaviour
         return client_state_msgs.Count > 0; /* && Time.time >= client_state_msgs.Peek().delivery_time*/
     }
 
-    private void ClientStoreCurrentStateAndStep(ref ClientState current_state, Rigidbody rigidbody, Inputs inputs, float dt)
+    private void ClientStoreCurrentStateAndStep(ref ClientState current_state, Rigidbody rigidbody, Commands inputs, float dt)
     {
         current_state.position = rigidbody.position;
 
@@ -292,12 +281,9 @@ public class PlayerMovement : MonoBehaviour
         GameManager.instance.MainScene.GetPhysicsScene().Simulate(dt);
     }
 
-    private void OnGUI()
+    private void ClientStateStep(Rigidbody rigidbody, Commands inputs, float dt)
     {
-        GUI.Box(new Rect(5f, 35f, 180f, 25f), $"State messages {client_state_msgs.Count}");
-        GUI.Box(new Rect(5f, 95f, 180f, 25f), $"Client timer {client_timer}");
-        GUI.Box(new Rect(5f, 125f, 180f, 25f), $"LAST TICK {client_tick_number}");
-        GUI.Box(new Rect(5f, 155f, 180f, 25f), $"SERVER TICK {client_last_received_state_tick}");
-        GUI.Box(new Rect(5f, 185f, 180f, 25f), $"FPS {fps}");
+        MovePlayer(inputs);
+        GameManager.instance.MainScene.GetPhysicsScene().Simulate(dt);
     }
 }

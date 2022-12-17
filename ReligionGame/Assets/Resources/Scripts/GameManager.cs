@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDisposable
 {
     public static GameManager instance;
 
@@ -26,8 +27,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Physics.IgnoreLayerCollision(8, 8);
+        Physics.IgnoreLayerCollision(6, 6);
         MainScene = SceneManager.GetActiveScene();
+
+        foreach (var obj in scriptableObjectPrefab.GetComponentsInChildren<SpawnedGameObject>())
+        {
+            spawnables.Add(obj.spawnedObjectId, obj);
+        }
     }
 
     private void Awake()
@@ -42,10 +48,7 @@ public class GameManager : MonoBehaviour
             Destroy(this);
         }
 
-        foreach(var obj in scriptableObjectPrefab.GetComponentsInChildren<SpawnedGameObject>())
-        {
-            spawnables.Add(obj.spawnedObjectId, obj);
-        }
+        
     }
 
     /// <summary>Spawns a player.</summary>
@@ -92,5 +95,32 @@ public class GameManager : MonoBehaviour
         GameObject _enemy = Instantiate(enemyPrefab, _position, Quaternion.identity);
         _enemy.GetComponent<EnemyManager>().Initialize(_id);
         enemies.Add(_id, _enemy.GetComponent<EnemyManager>());
+    }
+
+    private bool disposed = false;
+
+    public static float EulerTime = 10f;
+
+    protected virtual void Dispose(bool _disposing)
+    {
+        if (!disposed)
+        {
+            if (_disposing)
+            {
+                players = new Dictionary<int, PlayerManager>();
+                itemSpawners = new Dictionary<int, ItemSpawner>();
+                projectiles = new Dictionary<int, ProjectileManager>();
+                enemies = new Dictionary<int, EnemyManager>();
+                spawnables = new Dictionary<uint, SpawnedGameObject>();
+            }
+
+            disposed = true;
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

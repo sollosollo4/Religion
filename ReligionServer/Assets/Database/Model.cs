@@ -22,9 +22,26 @@ namespace Assets.Database
         IEnumerable<Model> GetModel(MySqlDataReader reader);
     }
 
-    public abstract class Model
+    public abstract class Model : IDbModel
     {
-        protected abstract string modelName { get; }
+        public abstract IEnumerable<Model> GetModel(MySqlDataReader reader);
+
+        public T getForeignModels<T>(Dictionary<string, string> dictionary, Model classInfo, MySqlConnection context) where T: new()
+        {
+            string getCharacterInfoClassQuery = classInfo.getAllRowsByFields(dictionary, ESelectableMethod.Equal);
+            MySqlCommand cmd = new MySqlCommand(getCharacterInfoClassQuery, context);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                if (reader.HasRows)
+                {
+                    return (T)classInfo.GetModel(reader);
+                }
+                else return new T();
+            }
+        }
+
+        protected virtual string modelName { get; }
         private string getEqualMethod(ESelectableMethod method)
         {
             switch (method)
@@ -92,7 +109,25 @@ namespace Assets.Database
 
             return queryText + ";";
         }
-        public virtual string getRowsByFields(string[] selectedRows, Dictionary<string, string> flds, ESelectableMethod method = ESelectableMethod.Equal, int limit = 0)
+
+        public virtual string updateRowWithValuesByFields(Dictionary<string, object> flds, Dictionary<string, string> wFlds, ESelectableMethod method = ESelectableMethod.Equal)
+        {
+            string queryText = $"UPDATE {modelName} SET ";
+            foreach (var field in flds)
+            {
+                queryText += $"{field.Key} = '{field.Value}{((flds.Keys.ToList().IndexOf(field.Key) == flds.Count - 1) ? "'" : "', ")}";
+            }
+
+            queryText += $" WHERE ";
+            foreach (var field in wFlds)
+            {
+                queryText += field.Key + " " + getEqualMethod(method) + " '" + field.Value + ((wFlds.Keys.ToList().IndexOf(field.Key) == wFlds.Count - 1) ? "'" : "', ");
+            }
+
+            return queryText + ";";
+        }
+
+        /*public virtual string getRowsByFields(string[] selectedRows, Dictionary<string, string> flds, ESelectableMethod method = ESelectableMethod.Equal, int limit = 0)
         {
             string limit_c = limit > 0 ? $" LIMIT {limit}" : "";
             string queryText = "SELECT ";
@@ -110,7 +145,8 @@ namespace Assets.Database
             queryText += limit_c;
 
             return queryText + ";";
-        }
+        }*/
+
         public virtual string deleteAllRows()
         {
             return "";

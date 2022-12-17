@@ -433,6 +433,7 @@ MonoBehaviour:
   id: 0
   health: 0
   maxHealth: 100
+  deathParticles: {fileID: 6126613493597726685, guid: c563a7de630838a49b4f5a8ee639282f, type: 3}
 --- !u!1 &7780337297725524344
 GameObject:
   m_ObjectHideFlags: 0

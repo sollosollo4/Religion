@@ -23,12 +23,22 @@ public class ClientSend : MonoBehaviour
 
     #region Packets
     /// <summary>Lets the server know that the welcome message was received.</summary>
-    public static void WelcomeReceived()
+    public static void WelcomeReceived(int currentCharacter)
     {
         using (Packet _packet = new Packet((int)ClientPackets.welcomeReceived))
         {
             _packet.Write(Client.instance.myId);
-            _packet.Write("TestPlayer");
+            _packet.Write(currentCharacter);
+
+            SendTCPData(_packet);
+        }
+    }
+
+    internal static void PlayerStuck()
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerStucks))
+        {
+            _packet.Write(Client.instance.myId);
 
             SendTCPData(_packet);
         }
@@ -100,6 +110,26 @@ public class ClientSend : MonoBehaviour
             _packet.Write(_inputMessage.camRotation);
             _packet.Write(_inputMessage.delivery_time);
             _packet.Write(_inputMessage.start_tick_number);
+
+            SendUDPData(_packet);
+        }
+    }
+
+    public static void PlayerMovement(CommandMessage _commandMessage)
+    {
+        using (Packet _packet = new Packet((int)ClientPackets.playerMovement))
+        {
+            _packet.Write(_commandMessage.inputs.Count);
+            _packet.Write(_commandMessage.start_tick_number);
+
+            foreach (Commands _input in _commandMessage.inputs)
+            {
+                _packet.Write(_input.jump);
+                _packet.Write(_input.sprint);
+                _packet.Write(_input.moveHorizontal);
+                _packet.Write(_input.moveVertical);
+                _packet.Write(_input.orientation);
+            }
 
             SendUDPData(_packet);
         }

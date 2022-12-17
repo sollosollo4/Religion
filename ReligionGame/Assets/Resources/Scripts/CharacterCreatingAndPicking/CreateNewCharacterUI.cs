@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -46,15 +47,16 @@ public class CreateNewCharacterUI : MonoBehaviour
             ClientSend.CreateNewCharater(inputCharacterNickname.text, selectedCharacterClass);
     }
 
-    public static void CloseCreateFormAndAddNewCharacterToList(CharacterPickerObject _character)
+    public static void CloseCreateFormAndAddNewCharacterToList(Character character)
     {
-
+        instance.CancelCreate();
+        CreateNewCharacterUIManager.instance.AddCharacterToPanel(character);
     }
 
     public void ErrorForm(string error)
     {
         errorForm.SetActive(true);
-        errorForm.GetComponent<Text>().text = error;
+        errorForm.GetComponentsInChildren<Text>().First().text = error;
     }
 
     public void CloseErrorForm()

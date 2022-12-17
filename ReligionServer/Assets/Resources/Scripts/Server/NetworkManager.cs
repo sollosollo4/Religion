@@ -14,6 +14,8 @@ public class NetworkManager : MonoBehaviour
 
     public GameObject MainLocation;
 
+    public GameObject PhycicsProcess;
+
     private void Awake()
     {
         if (instance == null)
@@ -33,17 +35,19 @@ public class NetworkManager : MonoBehaviour
         Application.targetFrameRate = 30;
         Physics.IgnoreLayerCollision(6, 6);
 
-        Server.Start(5, 26950);
+        Server.Start(50, 26950);
     }
 
     private void OnApplicationQuit()
     {
+        Debug.Log("Close debug session. close connections!");
         Server.Stop();
+        Debug.Log("Server ends.");
     }
 
-    public Player InstantiatePlayer()
+    public Player InstantiatePlayer(Vector3 position)
     {
-        Player player = Instantiate(playerPrefab, new Vector3(playerPrefab.transform.position.x, 16.0f, playerPrefab.transform.position.z), Quaternion.identity).GetComponent<Player>();
+        Player player = Instantiate(playerPrefab, position, Quaternion.identity).GetComponent<Player>();
         return player;
     }
 

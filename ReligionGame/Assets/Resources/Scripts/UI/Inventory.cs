@@ -33,7 +33,7 @@ public class Inventory : MonoBehaviour
 		}
 
 		AddItem(0);
-		for(int i=0; i<10; i++) AddItem(1);
+		for(int i=0; i<4; i++) AddItem(1);
 		AddItem(2);
 	}
 

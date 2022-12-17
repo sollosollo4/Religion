@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
         ServerSend.SpawnProjectile(this, thrownByPlayer);
 
         rigidBody.AddForce(initialForce);
-        StartCoroutine(ExplodeAfterTime());
+        //StartCoroutine(ExplodeAfterTime());
     }
 
     private void FixedUpdate()
@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
         Collider[] _colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider _collider in _colliders)
         {
-            if (_collider.CompareTag("Player"))
+            if (_collider.CompareTag("Player") && thrownByPlayer != _collider.GetComponent<Player>().id)
             {
                 _collider.GetComponent<Player>().TakeDamage(explosionDamage);
             }

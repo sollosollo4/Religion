@@ -27,16 +27,34 @@ public class ClientHandle : MonoBehaviour
         GameManager.instance.SpawnPlayer(_id, _username, _position, _rotation);
     }
 
+    public static void PlayerCommand(Packet _packet)
+    {
+        int _id = _packet.ReadInt();
+        if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
+        {
+            if (_id == Client.instance.myId)
+            {
+                sbyte _moveHorizontal = _packet.ReadSbyte();
+                sbyte _moveVertical = _packet.ReadSbyte();
+                short orientation = _packet.ReadShort();
+                bool _jump = _packet.ReadBool();
+                bool _sprint = _packet.ReadBool();
+
+                //_player.GetComponent<PlayerMovement>().SetStateMessages();
+            }
+        }
+    }
+
     public static void PlayerPosition(Packet _packet)
     {
         int _id = _packet.ReadInt();
-
+        
         if (GameManager.players.TryGetValue(_id, out PlayerManager _player))
         {
-            
             Vector3 _position = _packet.ReadVector3();
             uint _ticks = _packet.ReadUint();
             float _deliveryTime = _packet.ReadFloat();
+            //bool _isSprint = _packet.ReadBool();
 
             if (_id == Client.instance.myId)
             {
@@ -63,7 +81,9 @@ public class ClientHandle : MonoBehaviour
                     _player.animator.SetFloat("vertical", 0);
                 }
 
-                _player.transform.position = Vector3.Lerp(_player.transform.position, _position, 0.19f);
+                //_player.IsSprint = _isSprint;
+
+                _player.transform.position = Vector3.Lerp(_player.transform.position, _position, Time.deltaTime*GameManager.EulerTime);
             }
             
         }
@@ -160,7 +180,6 @@ public class ClientHandle : MonoBehaviour
         {
             manager.Explode(_position);
         }
-        
     }
 
     public static void SpawnEnemy(Packet _packet)
@@ -187,7 +206,10 @@ public class ClientHandle : MonoBehaviour
         int _enemyId = _packet.ReadInt();
         float _health = _packet.ReadFloat();
 
-        GameManager.enemies[_enemyId].SetHealth(_health);
+        if (GameManager.enemies.TryGetValue(_enemyId, out EnemyManager _enemy))
+        {
+            _enemy.SetHealth(_health);
+        }
     }
 
     public static void CreateChatMessage(Packet _packet)
@@ -201,9 +223,15 @@ public class ClientHandle : MonoBehaviour
     {
         if (_packet.ReadBool())
         {
+            int _characterId = _packet.ReadInt();
             string _characterName = _packet.ReadString();
             string _characterClassName = _packet.ReadString();
-            CreateNewCharacterUI.CloseCreateFormAndAddNewCharacterToList(new CharacterPickerObject(_characterName, _characterClassName, ""));
+            CreateNewCharacterUI.CloseCreateFormAndAddNewCharacterToList(new Character() 
+            {   
+                CharacterId = _characterId, 
+                CharacterClass = CharacterClass.CreateClassByName(_characterClassName), 
+                CharacterName = _characterName 
+            });
         }
         else
         {
@@ -253,5 +281,23 @@ public class ClientHandle : MonoBehaviour
                 player.IsTool = false;
             }
         }
+    }
+
+    public static void ClientDisconnect(Packet _packet)
+    {
+        int _fromClient = _packet.ReadInt();
+        Client.instance.Disconnect();
+        Client.instance.ServerDown();
+    }
+
+    public static void ParkourObjectData(Packet _packet)
+    {
+        string _name = _packet.ReadString();
+        Vector3 _pos = _packet.ReadVector3();
+        Quaternion _rot = _packet.ReadQuaternion();
+
+        GameObject parkour = GameObject.Find(_name);
+        parkour.transform.position = _pos;
+        parkour.transform.rotation = _rot;
     }
 }

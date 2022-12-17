@@ -7,8 +7,7 @@ using UnityEngine;
 public class PlayerLook : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private float sensX = 100f;
-    [SerializeField] private float sensY = 100f;
+    [SerializeField] public float sensitivity = 100f;
 
     [SerializeField] public Transform cam = null;
     [SerializeField] public Transform orientation = null;
@@ -20,10 +19,10 @@ public class PlayerLook : MonoBehaviour
     float mouseX;
     float mouseY;
 
-    float multiplier = 0.01f;
+    public float multiplier = 0.01f;
 
-    float xRotation;
     float yRotation;
+    float xRotation;
 
     private void Start()
     {
@@ -33,20 +32,15 @@ public class PlayerLook : MonoBehaviour
 
     private void Update()
     {
-
-#if UNITY_EDITOR
-#else
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
+        if (UIManager.instance.IsClickedUIButton())
             CursorLock();
-        }
+        
 
         if(!Cursor.visible)
-#endif
-        Look();
+            Look();
     }
 
-    private void CursorLock()
+    public void CursorLock()
     {
         if (Cursor.visible)
         {
@@ -65,12 +59,12 @@ public class PlayerLook : MonoBehaviour
         mouseX = Input.GetAxisRaw("Mouse X");
         mouseY = Input.GetAxisRaw("Mouse Y");
 
-        yRotation += mouseX * sensX * multiplier;
-        xRotation -= mouseY * sensY * multiplier;
+        yRotation += mouseX * sensitivity * multiplier;
+        xRotation -= mouseY * sensitivity * multiplier;
 
         xRotation = Mathf.Clamp(xRotation, -clampAngle, clampAngle);
 
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
-        orientation.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 }

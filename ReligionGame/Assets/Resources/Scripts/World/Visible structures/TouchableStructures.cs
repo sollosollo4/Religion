@@ -16,6 +16,7 @@ public class TouchableStructures : MonoBehaviour
 
     private void Start()
     {
+        if(UIManager.instance != null)
         PlayerPanelTool = UIManager.instance.toolPanel;
     }
 

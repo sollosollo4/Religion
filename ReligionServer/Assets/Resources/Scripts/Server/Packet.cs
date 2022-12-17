@@ -28,8 +28,10 @@ public enum ServerPackets
     playerCreateNewCharacter,
     playerState,
     playerTouchStructure,
-    playerEndMining,
-    playerStartMining
+    playerUnTouchStructure,
+    clientDisconnect,
+    parkourObject,
+    playerCommand
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -43,7 +45,8 @@ public enum ClientPackets
     playerTryConnection,
     characterNew,
     animationState,
-    playerUseTool
+    playerUseTool,
+    playerStucks
 }
 
 public class Packet : IDisposable

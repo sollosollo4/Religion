@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     public int id;
+    public int characterId;
     public string username;
     public Transform shootOrigin;
     public float throwForce = 600f;
@@ -16,9 +18,10 @@ public class Player : MonoBehaviour
     public bool isJump;
     public bool isTool;
 
-    public void Initialize(int _id, string _username)
+    public void Initialize(int _id, string _username, int _characterId)
     {
         id = _id;
+        characterId = _characterId;
         username = _username;
         health = maxHealth;
     }
@@ -32,7 +35,7 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(shootOrigin.position, _viewDirection, out RaycastHit _hit, 25f))
         {
-            if (_hit.collider.CompareTag("Player"))
+            if (_hit.collider.CompareTag("Player") && _hit.collider.GetComponent<Player>().id != id)
             {
                 _hit.collider.GetComponent<Player>().TakeDamage(50f);
             }
@@ -93,5 +96,10 @@ public class Player : MonoBehaviour
 
         itemAmount++;
         return true;
+    }
+
+    public void Stucks()
+    {
+        transform.position = new Vector3(330f, 18f, 330f);
     }
 }

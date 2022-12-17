@@ -21,7 +21,7 @@ namespace Assets.Database.Models
         {
         }
 
-        public IEnumerable<Model> GetModel(MySqlDataReader reader)
+        public override IEnumerable<Model> GetModel(MySqlDataReader reader)
         {
             if (reader.HasRows)
             {

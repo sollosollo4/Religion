@@ -1,54 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MainMenuManager : MonoBehaviour
 {
-    public GameObject MainMenu;
+    public GameObject SettingsPanel;
+    public bool isOpen;
 
-    private bool isOpen;
     // Start is called before the first frame update
     void Start()
     {
-        MainMenu.SetActive(false);
+        gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ImStuck()
     {
-#if UNITY_EDITOR
-#else
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (isOpen)
-                CloseMainMenu();
-            else
-                OpenMainMenu();
-        }
-#endif
-    }
-
-    public void OpenMainMenu()
-    {
-        MainMenu.gameObject.SetActive(true);
-        UIManager.instance.CrosshairGameObject.SetActive(false);
-        isOpen = true;
-    }
-
-    public void CloseMainMenu()
-    {
-        MainMenu.gameObject.SetActive(false);
-        UIManager.instance.CrosshairGameObject.SetActive(true);
-        isOpen = false;
+        ClientSend.PlayerStuck();
     }
 
     public void OpenSettings()
     {
-
+        SettingsPanel.GetComponent<SettingsPanel>().Show();
     }
 
     public void ExitButton()
     {
         Application.Quit();
+    }
+
+    public void CloseAllForms()
+    {
+        OpenSettings();
     }
 }

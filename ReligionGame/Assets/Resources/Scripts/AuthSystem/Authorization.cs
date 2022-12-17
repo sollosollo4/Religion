@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -125,7 +126,7 @@ public class Authorization : MonoBehaviour
     public void ShowErrorForm(string _message)
     {
         errorForm.SetActive(true);
-        errorForm.GetComponentInChildren<Text>().text = _message;
+        errorForm.GetComponentsInChildren<Text>().First().text = _message;
     }
 
     public void CloseErrorForm()

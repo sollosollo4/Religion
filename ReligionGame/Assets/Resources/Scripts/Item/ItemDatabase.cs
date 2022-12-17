@@ -10,7 +10,7 @@ public class ItemDatabase : MonoBehaviour {
 
 	void Start()
 	{
-		
+		Debug.Log(Item.ColorToHex(Color.cyan));
 	}
 
 	public void Instatiate()
@@ -21,7 +21,6 @@ public class ItemDatabase : MonoBehaviour {
 
 	public Item FetchItemById(int id)
 	{
-		Debug.Log(database.Count);
 		for (int i = 0; i < database.Count; i++)
 		{
 			if (database[i].Id == id)
@@ -124,9 +123,9 @@ public class Item
 
         foreach (string sChar in pairs.Keys)
         {
-			characters += $"<color={aspectsColors[sChar]}>{sChar}</color>: {pairs[sChar]}";
-
+			characters += $"<color={ColorToHex(aspectsColors[sChar])}>{sChar}</color>: {pairs[sChar]}\n";
 		}
+
 		return characters;
     }
 
@@ -144,10 +143,6 @@ public class Snippets00002
 		 '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 	#endregion
 
-	public Snippets00002()
-	{
-	}
-
 	/// <summary>
 	/// Convert a .NET Color to a hex string.
 	/// </summary>
@@ -155,9 +150,9 @@ public class Snippets00002
 	public static string ColorToHexString(Color color)
 	{
 		byte[] bytes = new byte[3];
-		bytes[0] = (byte)color.r;
-		bytes[1] = (byte)color.g;
-		bytes[2] = (byte)color.b;
+		bytes[0] = Convert.ToByte((color.r >= 1.0 ? 255 : color.r * 256.0));
+		bytes[1] = Convert.ToByte((color.b >= 1.0 ? 255 : color.b * 256.0));
+		bytes[2] = Convert.ToByte((color.g >= 1.0 ? 255 : color.g * 256.0));
 		char[] chars = new char[bytes.Length * 2];
 		for (int i = 0; i < bytes.Length; i++)
 		{

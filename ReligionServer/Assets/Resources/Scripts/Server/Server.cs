@@ -14,7 +14,7 @@ public class Server
     public delegate void PacketHandler(int _fromClient, Packet _packet);
     public static Dictionary<int, PacketHandler> packetHandlers;
     //public static Dictionary<uint, SpawnedGameObject> spawnedGameObjects;
-    public static MySqlConnectionClass mySqlConnection;
+    public static MySqlConnectionSingletone mySqlConnection;
 
     private static TcpListener tcpListener;
     private static UdpClient udpListener;
@@ -41,7 +41,8 @@ public class Server
 
         Debug.Log($"Server started on port {Port}.");
 
-        mySqlConnection = new MySqlConnectionClass();
+        mySqlConnection = new MySqlConnectionSingletone();
+        mySqlConnection.setupControllers();
 
         //spawnedGameObjects = mySqlConnection.getController<Assets.Database.Controllers.StructureController>().loadPrefabs();
     }
@@ -143,7 +144,8 @@ public class Server
             { (int)ClientPackets.chatMessage, ServerHandle.PlayerChatMessage },
             { (int)ClientPackets.playerTryConnection, ServerHandle.PlayerTryConnection },
             { (int)ClientPackets.characterNew, ServerHandle.CharacterNew },
-            { (int)ClientPackets.playerUseTool, ServerHandle.PlayerUseTool }
+            { (int)ClientPackets.playerUseTool, ServerHandle.PlayerUseTool },
+            { (int)ClientPackets.playerStucks, ServerHandle.PlayerStucks }
         };
 
         Debug.Log("Initialized packets.");
@@ -151,10 +153,15 @@ public class Server
 
     public static void Stop()
     {
-        if(mySqlConnection != null)
-            mySqlConnection.MySqlCloseConnection();
+        // Disconnect all players
+        foreach(Client client in clients.Values)
+        {
+            client.Disconnect();
+        }
 
-        
+        if(mySqlConnection != null)
+            mySqlConnection.MySqlConnectionClose();
+
         tcpListener.Stop();
 
         udpListener.Close();

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Client : MonoBehaviour
 {
@@ -18,7 +19,10 @@ public class Client : MonoBehaviour
 
     private bool isConnected = false;
     private delegate void PacketHandler(Packet _packet);
+    public List<Character> characters;
+
     private static Dictionary<int, PacketHandler> packetHandlers;
+    
 
     private void Awake()
     {
@@ -109,6 +113,7 @@ public class Client : MonoBehaviour
             catch (Exception _ex)
             {
                 Debug.Log($"Error sending data to server via TCP: {_ex}");
+                Authorization.instance.ShowErrorForm("Сервер не доступен!");
                 Disconnect();
             }
         }
@@ -297,6 +302,24 @@ public class Client : MonoBehaviour
         }
     }
 
+    public void ServerDown()
+    {
+        GameManager.instance.Dispose();
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        SceneManager.LoadScene("Authorization", LoadSceneMode.Single);
+
+        StartCoroutine(ExecuteAfterTime(1f));
+    }
+
+    IEnumerator ExecuteAfterTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        Authorization.instance.ShowErrorForm("Сервер был выключен.");
+    }
+
     /// <summary>Initializes all necessary client data.</summary>
     private void InitializeClientData()
     {
@@ -322,6 +345,10 @@ public class Client : MonoBehaviour
             { (int)ServerPackets.tryConnection, ClientAuthHandle.TryConnection },
             { (int)ServerPackets.playerCreateNewCharacter, ClientHandle.CreateNewCharacter },
             { (int)ServerPackets.playerTouchStructure, ClientHandle.PlayerTouchStructure },
+            { (int)ServerPackets.clientDisconnect, ClientHandle.ClientDisconnect },
+            { (int)ServerPackets.parkourObject, ClientHandle.ParkourObjectData },
+            { (int) ServerPackets.playerCommand, ClientHandle.PlayerCommand}
+
         };
         Debug.Log("Initialized packets.");
     }

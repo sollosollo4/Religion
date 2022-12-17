@@ -16,12 +16,22 @@ namespace Assets.Database.Models
 
         protected override string modelName => "characters";
 
+        public character_info_class characterInfoClass;
+
         public override void createModel(MySqlConnection context)
         {
+            /*context.Open();
 
+            characterInfoClass = getForeignModels<character_info_class>(new Dictionary<string, string>()
+            {
+                { "characterId", id.ToString() }
+            }, new character_info_class(), context);
+
+
+            context.Close();*/
         }
 
-        public IEnumerable<Model> GetModel(MySqlDataReader reader)
+        public override IEnumerable<Model> GetModel(MySqlDataReader reader)
         {
             if (reader.HasRows)
             {

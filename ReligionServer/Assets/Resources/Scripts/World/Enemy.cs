@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public static int maxEnemies = 10;
+    public static int maxEnemies = 3;
     public static Dictionary<int, Enemy> enemies = new Dictionary<int, Enemy>();
     private static int nextEnemyId = 1;
 
@@ -153,7 +153,7 @@ public class Enemy : MonoBehaviour
 
             if (_enemyToPlayer.magnitude <= shootRange)
             {
-                Shoot(_enemyToPlayer);
+                //Shoot(_enemyToPlayer);
             }
             else
             {

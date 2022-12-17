@@ -49,13 +49,15 @@ namespace Assets.Database.Controllers
             return AccountsModel.id;
         }
 
-        static string CreateSalt(int size)
+        /*
+         * Если нужен будет код создания сложной соли, то вот он
+         * static string CreateSalt(int size)
         {
             RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
             byte[] buff = new byte[size];
             rng.GetBytes(buff);
             return Convert.ToBase64String(buff);
-        }
+        }*/
 
         static string GenerateHash(string input, string salt)
         {

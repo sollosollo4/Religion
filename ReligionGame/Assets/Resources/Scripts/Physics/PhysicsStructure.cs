@@ -32,6 +32,4 @@ public struct StateMessage
     public float delivery_time;
     public uint tick_number;
     public Vector3 position;
-    //public Vector3 velocity;
-    //public Vector3 angular_velocity;
 }

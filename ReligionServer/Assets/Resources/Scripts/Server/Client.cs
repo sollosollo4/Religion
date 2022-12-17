@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
 using System.Configuration;
+using System.Linq;
 
 public class Client
 {
@@ -153,7 +154,9 @@ public class Client
         /// <summary>Closes and cleans up the TCP connection.</summary>
         public void Disconnect()
         {
-            socket.Close();
+            if(socket != null)
+                socket.Close();
+
             stream = null;
             receivedData = null;
             receiveBuffer = null;
@@ -216,13 +219,16 @@ public class Client
     }
 
     /// <summary>Sends the client into the game and informs other clients of the new player.</summary>
-    /// <param name="_playerName">The username of the new player.</param>
-    public void SendIntoGame(string _playerName)
+    /// <param name="_characterId">The character Id of the new player.</param>
+    public void SendIntoGame(int _characterId)
     {
-        player = NetworkManager.instance.InstantiatePlayer();
-        player.Initialize(id, _playerName);
+        Vector3 position = Character.GetCharacterWorldPosition(_characterId);
+
+        player = NetworkManager.instance.InstantiatePlayer(position);
+        player.Initialize(id, playerCharacters.First(c => c.CharacterId == _characterId).CharacterName, _characterId);
 
         // Send all players to the new player
+        // Загружаем клиенту всех игроков
         foreach (Client _client in Server.clients.Values)
         {
             if (_client.player != null)
@@ -235,6 +241,7 @@ public class Client
         }
 
         // Send the new player to all players (including himself)
+        // Загружаем клиентам игрока
         foreach (Client _client in Server.clients.Values)
         {
             if (_client.player != null)
@@ -264,20 +271,21 @@ public class Client
     /// <summary>Disconnects the client and stops all network traffic.</summary>
     public void Disconnect()
     {
-        Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
+        //Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
         ThreadManager.ExecuteOnMainThread(() =>
         {
             if (player)
             {
+                Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterWorldInfoController>().setCharacterWorldPosition(player.transform.position, player.characterId);
                 UnityEngine.Object.Destroy(player.gameObject);
                 player = null;
+                ServerSend.PlayerDisconnected(id);
             }
         });
 
+        ServerSend.ClientDisconnect(id);
         tcp.Disconnect();
         udp.Disconnect();
-
-        ServerSend.PlayerDisconnected(id);
     }
 }

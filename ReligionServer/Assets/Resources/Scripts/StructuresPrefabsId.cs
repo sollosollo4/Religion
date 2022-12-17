@@ -26,7 +26,7 @@ public class StructuresPrefabsId : MonoBehaviour
             AssetDatabase.SaveAssets();
         }
 
-        Server.mySqlConnection = new Assets.Database.MySqlConnectionClass();
+        Server.mySqlConnection = new Assets.Database.MySqlConnectionSingletone();
         Server.mySqlConnection.getController<StructureController>().savePrefabs(touchableObjects);
     }
 

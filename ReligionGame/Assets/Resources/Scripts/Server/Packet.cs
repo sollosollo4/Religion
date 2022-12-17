@@ -28,7 +28,10 @@ public enum ServerPackets
     playerCreateNewCharacter,
     playerAnimationState,
     playerTouchStructure,
-    playerUnTouchStructure
+    playerUnTouchStructure,
+    clientDisconnect,
+    parkourObject,
+    playerCommand
 }
 
 /// <summary>Sent from client to server.</summary>
@@ -43,6 +46,7 @@ public enum ClientPackets
     createNewCharacter,
     animationState,
     playerUseTool,
+    playerStucks,
 }
 
 public class Packet : IDisposable
@@ -267,6 +271,25 @@ public class Packet : IDisposable
                 readPos += 2; // Increase readPos by 2
             }
             return _value; // Return the short
+        }
+        else
+        {
+            throw new Exception("Could not read value of type 'short'!");
+        }
+    }
+
+    public sbyte ReadSbyte(bool _moveReadPos = true)
+    {
+        if (buffer.Count > readPos)
+        {
+            // If there are unread bytes
+            short _value = BitConverter.ToInt16(readableBuffer, readPos); // Convert the bytes to a short
+            if (_moveReadPos)
+            {
+                // If _moveReadPos is true and there are unread bytes
+                readPos += 1; // Increase readPos by 2
+            }
+            return Convert.ToSByte(_value); // Return the short
         }
         else
         {

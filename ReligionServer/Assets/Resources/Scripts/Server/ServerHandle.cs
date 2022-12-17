@@ -9,36 +9,39 @@ public class ServerHandle
     public static void WelcomeReceived(int _fromClient, Packet _packet)
     {
         int _clientIdCheck = _packet.ReadInt();
-        string _username = _packet.ReadString();
+        int _charId = _packet.ReadInt();
+        // int character_id = _packet.ReadInt();
 
         Debug.Log($"{Server.clients[_fromClient].tcp.socket.Client.RemoteEndPoint} connected successfully and is now player {_fromClient}.");
         if (_fromClient != _clientIdCheck)
         {
-            Debug.Log($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
+            Debug.Log($"Player \"{_charId}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
         }
-        Server.clients[_fromClient].SendIntoGame(_username);
+        Server.clients[_fromClient].SendIntoGame(_charId);
     }
 
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
         int _inputsCount = _packet.ReadInt();
-        InputMessage inputMsg;
-        inputMsg.inputs = new List<Inputs>(_inputsCount);
+        CommandMessage commandMsg;
+        commandMsg.inputs = new List<Commands>(_inputsCount);
+        commandMsg.start_tick_number = _packet.ReadUint();
         for (int i = 0; i < _inputsCount; i++)
         {
-            Inputs inpt;
-            inpt.moveD = _packet.ReadVector3();
-            inpt.slopeD = _packet.ReadVector3();
-            inpt.jump = _packet.ReadBool();
-            inpt.sprint = _packet.ReadBool();
-            inputMsg.inputs.Add(inpt);
-        }
-        inputMsg.camRotation = _packet.ReadFloat();
-        inputMsg.delivery_time = _packet.ReadFloat();
-        inputMsg.start_tick_number = _packet.ReadUint();
+            Commands command;
+            command.jump = _packet.ReadBool();
+            command.sprint = _packet.ReadBool();
+            command.moveHorizontal = Convert.ToSByte(_packet.ReadShort());
+            command.moveVertical = Convert.ToSByte(_packet.ReadShort());
+            command.orientation = _packet.ReadShort();
 
-        Server.clients[_fromClient].player.GetComponent<PlayerPhysics>().SetInput(inputMsg);
-        ServerSend.PlayerRotation(_fromClient, inputMsg.camRotation);
+            commandMsg.inputs.Add(command);
+        }
+
+        NetworkManager.instance.PhycicsProcess.GetComponent<PhysicsProcess>().SetMovementMessage(_fromClient, commandMsg);
+
+        //Server.clients[_fromClient].player.GetComponent<PlayerPhysics>().SetMovementMessage(commandMsg);
+        //ServerSend.PlayerRotation(_fromClient, inputMsg.);
     }
 
     public static void PlayerShoot(int _fromClient, Packet _packet)
@@ -90,8 +93,14 @@ public class ServerHandle
             AccountId = Server.clients[_fromClient].accountId
         };
 
-        bool isCreated = Character.CreateNewCharacter(newChar);
-        ServerSend.CreateNewCharacter(_fromClient, newChar, isCreated);
+        int newCharacterId = Character.CreateNewCharacter(newChar);
+        bool isCreated = newCharacterId == 0 ? false : true;
+        if(isCreated)
+        {
+            newChar.CharacterId = newCharacterId;
+            Server.clients[_fromClient].playerCharacters.Add(newChar);
+        }
+        ServerSend.CreateNewCharacter(_fromClient, newChar, isCreated, newCharacterId);
     }
 
     public static void PlayerUseTool(int _fromClient, Packet _packet)
@@ -103,5 +112,11 @@ public class ServerHandle
         touchableElement.GetComponent<TouchableStructure>().StartMining(_fromClient);
 
         Server.clients[_fromClient].player.isTool = true;
+    }
+
+    public static void PlayerStucks(int _fromClient, Packet _packet)
+    {
+        int _playerId = _packet.ReadInt();
+        Server.clients[_fromClient].player.Stucks();
     }
 }

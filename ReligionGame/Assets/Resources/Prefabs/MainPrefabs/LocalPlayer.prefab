@@ -137,7 +137,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7677484484946083636}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: e089a215d2d6dd54db454f8927546111, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.21
@@ -172,14 +172,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6ab29abd99fd414eace3855bf9b5d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2.3
-  airMultiplier: 0.4
-  walkSpeed: 2.3
-  sprintSpeed: 4.6
-  acceleration: 8
-  groundDrag: 6
-  airDrag: 0
-  jumpForce: 3
+  playerHeight: 1.9
+  isSprint: 0
+  moveSpeed: 12
+  airMultiplier: 0.9
+  walkSpeed: 12
+  sprintSpeed: 16
+  movementMultiplier: 10
+  groundDrag: 2.2
+  airDrag: 2
+  jumpForce: 35
+  jumpCooldown: 1.5
   jumpKey: 32
   sprintKey: 304
   groundCheck: {fileID: 5578685982313933454}
@@ -187,6 +190,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   groundDistance: 0.1
+  isGrounded: 0
+  rb: {fileID: 0}
+  isDragSystem: 1
 --- !u!114 &4457132815197352517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,12 +205,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 942e327659201b8488f4531c396a4a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 100
-  sensY: 100
+  sensitivity: 100
   cam: {fileID: 0}
   orientation: {fileID: 633173935995587523}
   cameraPosition: {fileID: 162945622854563515}
   clampAngle: 90
+  multiplier: 0.01
 --- !u!114 &8283048436765457631
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,6 +232,7 @@ MonoBehaviour:
   model: {fileID: 3888762895771648520}
   animator: {fileID: 687578935802580837}
   IsTool: 0
+  IsSprint: 0
   WorkTouchName: 
   lastTouchableStructure: {fileID: 0}
   ToolHand: {fileID: 638455917200356337}
@@ -623,7 +630,19 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_UpdateWhenOffscreen
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
       propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: e0cad30f368253446b20171acd643881, type: 2}
+    - target: {fileID: 4408529143427508875, guid: d6d06c887a1aae94f8c6e8cc2c0c557b, type: 3}
+      propertyPath: m_Materials.Array.data[1]
       value: 
       objectReference: {fileID: 2100000, guid: e0cad30f368253446b20171acd643881, type: 2}
     m_RemovedComponents: []

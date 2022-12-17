@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 public class Character
 {
+    public int CharacterId;
     public string CharacterName;
     public CharacterClass CharacterClass;
 }
