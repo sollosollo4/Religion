@@ -2190,19 +2190,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHeight: 1.9
-  moveSpeed: 12
+  moveSpeed: 8
   airMultiplier: 0.9
-  walkSpeed: 12
-  sprintSpeed: 16
+  walkSpeed: 8
+  sprintSpeed: 10
   acceleration: 10
   groundDrag: 2.2
   airDrag: 2
-  jumpForce: 35
+  jumpForce: 30
   groundMask:
     serializedVersion: 2
     m_Bits: 128
   groundDistance: 0.1
-  isDragSystem: 0
+  isDragSystem: 1
 --- !u!4 &1261125446
 Transform:
   m_ObjectHideFlags: 0
@@ -16509,7 +16509,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2536591867434625251}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: AllWater
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182010,7 +182010,7 @@ GameObject:
   - component: {fileID: 8135478189672587205}
   - component: {fileID: 8135478189672587202}
   - component: {fileID: 8135478189672587204}
-  m_Layer: 7
+  m_Layer: 9
   m_Name: river1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

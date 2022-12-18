@@ -174,14 +174,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerHeight: 1.9
   isSprint: 0
-  moveSpeed: 12
+  moveSpeed: 8
   airMultiplier: 0.9
-  walkSpeed: 12
-  sprintSpeed: 16
+  walkSpeed: 8
+  sprintSpeed: 10
   movementMultiplier: 10
   groundDrag: 2.2
   airDrag: 2
-  jumpForce: 35
+  jumpForce: 30
   jumpCooldown: 1.5
   jumpKey: 32
   sprintKey: 304
@@ -190,8 +190,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   groundDistance: 0.1
-  isGrounded: 0
   rb: {fileID: 0}
+  horizontalMovement: 0
+  verticalMovement: 0
+  isGrounded: 0
   isDragSystem: 1
 --- !u!114 &4457132815197352517
 MonoBehaviour:

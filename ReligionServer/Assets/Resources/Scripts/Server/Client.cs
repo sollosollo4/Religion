@@ -277,6 +277,7 @@ public class Client
         {
             if (player)
             {
+                NetworkManager.instance.PhycicsProcess.GetComponent<PhysicsProcess>().RemoveClientFromPhysics(id);
                 Server.mySqlConnection.getController<Assets.Database.Controllers.CharacterWorldInfoController>().setCharacterWorldPosition(player.transform.position, player.characterId);
                 UnityEngine.Object.Destroy(player.gameObject);
                 player = null;

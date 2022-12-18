@@ -29,36 +29,31 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Keybinds")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;   
+    [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
 
-    float horizontalMovement;
-    float verticalMovement;
-
+    
     [Header("Ground Detection")]
     public Transform groundCheck;
     [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.2f;
-    public bool isGrounded;
-
-    Vector3 moveDirection;
-    Vector3 slopeMoveDirection;
+    
+   
 
     public Rigidbody rb;
-
+    public float horizontalMovement;
+    public float verticalMovement;
     public RaycastHit slopeHit;
+    public bool isGrounded;
 
     private float client_timer;
     private uint client_tick_number;
     private uint client_last_received_state_tick;
-    private const int c_client_buffer_size = 8192;
+    private const int c_client_buffer_size = 32768;
     private ClientState[] client_state_buffer; // здесь клиент хранит предсказанные ходы
-    private Inputs[] client_input_buffer; // клиент хранит прогнозируемые входные данные здесь
-    private Queue<StateMessage> client_state_msgs;
+    private Queue<StateMessage> client_state_msgs; // клиент хранит прогнозируемые входные данные здесь
 
     private Commands[] client_command_buffer; // клиент хранит прогнозируемые входные данные здесь
 
-    private bool isJump;
-    private float canJump = 0f;
 
     private void Start()
     {
@@ -70,20 +65,16 @@ public class PlayerMovement : MonoBehaviour
         client_tick_number = 0;
         client_last_received_state_tick = 0;
         client_state_buffer = new ClientState[c_client_buffer_size];
-        client_input_buffer = new Inputs[c_client_buffer_size];
         client_command_buffer = new Commands[c_client_buffer_size];
         client_state_msgs = new Queue<StateMessage>();
     }
 
     private void Update()
     {
-        Animations();
-
         // проверяем на почве ли мы
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         // падение
         ControlDrag(); // just a control
-
         // ускоряемся ли?
         ControlSpeed(); // just a speed control
     }
@@ -150,10 +141,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     buffer_slot = rewind_tick_number % c_client_buffer_size;
 
-                    ClientStateStep(
-                        rb,
-                        client_command_buffer[buffer_slot],
-                        dt);
+                    ClientStateStep(client_command_buffer[buffer_slot], dt);
 
                     ++rewind_tick_number;
                 }
@@ -165,31 +153,11 @@ public class PlayerMovement : MonoBehaviour
 
     public bool isDragSystem;
 
-    void Animations()
-    {
-        GetComponent<PlayerManager>().animator.SetBool("isSprint", isSprint);
-
-        if (!isGrounded)
-        {
-            GetComponent<PlayerManager>().animator.SetBool("isGrounded", false);
-            GetComponent<PlayerManager>().animator.SetFloat("velocityY", Mathf.Sign(rb.velocity.y));
-        }
-
-        if (isGrounded)
-        {
-            GetComponent<PlayerManager>().animator.SetBool("isGrounded", true);
-            GetComponent<PlayerManager>().animator.SetFloat("velocityY", 0);
-        }
-    }
-
     Commands MyInput()
     {
         Commands command = new Commands();
         horizontalMovement = Input.GetAxisRaw("Horizontal");
         verticalMovement = Input.GetAxisRaw("Vertical");
-
-        GetComponentInChildren<Animator>().SetFloat("horizontal", horizontalMovement);
-        GetComponentInChildren<Animator>().SetFloat("vertical", verticalMovement);
         
         command.moveHorizontal = Convert.ToSByte(horizontalMovement);
         command.moveVertical = Convert.ToSByte(verticalMovement);
@@ -198,7 +166,6 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKey(jumpKey) && isGrounded)
         {
             command.jump = true;
-            isJump = true;
         }
 
         command.orientation = Convert.ToInt16(GetComponent<PlayerLook>().orientation.eulerAngles.y);
@@ -256,7 +223,8 @@ public class PlayerMovement : MonoBehaviour
         gog.execute(this, inputs);
         
 
-        if(inputs.jump) {
+        if(inputs.jump) 
+        {
             JumpCommand go = new JumpCommand();
             go.execute(this, inputs);
         }
@@ -270,7 +238,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool ClientHasStateMessage()
     {
-        return client_state_msgs.Count > 0; /* && Time.time >= client_state_msgs.Peek().delivery_time*/
+        return client_state_msgs.Count > 0;
     }
 
     private void ClientStoreCurrentStateAndStep(ref ClientState current_state, Rigidbody rigidbody, Commands inputs, float dt)
@@ -281,7 +249,7 @@ public class PlayerMovement : MonoBehaviour
         GameManager.instance.MainScene.GetPhysicsScene().Simulate(dt);
     }
 
-    private void ClientStateStep(Rigidbody rigidbody, Commands inputs, float dt)
+    private void ClientStateStep(Commands inputs, float dt)
     {
         MovePlayer(inputs);
         GameManager.instance.MainScene.GetPhysicsScene().Simulate(dt);

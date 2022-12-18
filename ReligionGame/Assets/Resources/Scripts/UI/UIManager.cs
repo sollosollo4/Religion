@@ -45,6 +45,11 @@ public class UIManager : MonoBehaviour
         };
     }
 
+    private void Update()
+    {
+        IsClickedUIButton();
+    }
+
     public void CloseAll()
     {
         foreach (KeyCode simple in UIKeyCodes.Keys)
@@ -122,13 +127,11 @@ public class UIManager : MonoBehaviour
     {
         inventoryPanel.SetActive(open);
         inventoryPanel.GetComponent<Inventory>().IsOpen = open;
-        CrosshairGameObject.SetActive(!open);
     }
 
     public void CharacterAction(bool open)
     {
         characterPanel.SetActive(open);
-        CrosshairGameObject.SetActive(!open);
     }
 
     public void MainMenuAction(bool open)
@@ -146,7 +149,6 @@ public class UIManager : MonoBehaviour
             // А потом при еще одном нажатии уже открываем меню
             IsUIBlock = open;
             gameMenu.SetActive(open);
-            CrosshairGameObject.SetActive(!open);
             gameMenu.GetComponent<MainMenuManager>().isOpen = open;
         }
     }

@@ -70,20 +70,11 @@ public class ClientHandle : MonoBehaviour
             else
             {
                 Vector3 _posCheck = (_position - _player.transform.position).normalized;
-                if (_posCheck.x != _posCheck.z) 
-                {
-                    _player.animator.SetFloat("horizontal", _posCheck.x);
-                    _player.animator.SetFloat("vertical", _posCheck.z);
-                }
-                else
-                {
-                    _player.animator.SetFloat("horizontal", 0);
-                    _player.animator.SetFloat("vertical", 0);
-                }
+                _player.GetComponent<OtherPlayerAnimation>().setPosCheck(_posCheck);
+                
+                // _player.IsSprint = _isSprint;
 
-                //_player.IsSprint = _isSprint;
-
-                _player.transform.position = Vector3.Lerp(_player.transform.position, _position, Time.deltaTime*GameManager.EulerTime);
+                _player.transform.position = Vector3.Lerp(_player.transform.position, _position, Time.deltaTime * GameManager.EulerTime);
             }
             
         }

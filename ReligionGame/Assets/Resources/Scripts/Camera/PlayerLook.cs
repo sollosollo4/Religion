@@ -14,6 +14,8 @@ public class PlayerLook : MonoBehaviour
 
     [SerializeField] public Transform cameraPosition;
 
+    public GameObject CrosshairGameObject;
+
     public float clampAngle = 87f;
 
     float mouseX;
@@ -26,6 +28,7 @@ public class PlayerLook : MonoBehaviour
 
     private void Start()
     {
+        CrosshairGameObject = UIManager.instance.CrosshairGameObject;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -33,6 +36,7 @@ public class PlayerLook : MonoBehaviour
     private void Update()
     {
         if (UIManager.instance.IsClickedUIButton())
+        //if(Input.GetKeyDown(KeyCode.LeftAlt))
             CursorLock();
         
 
@@ -44,11 +48,13 @@ public class PlayerLook : MonoBehaviour
     {
         if (Cursor.visible)
         {
+            CrosshairGameObject.SetActive(true);
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
         }
         else
         {
+            CrosshairGameObject.SetActive(false);
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
         }

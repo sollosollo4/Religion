@@ -32,7 +32,7 @@ public class PhysicsProcess : MonoBehaviour
     [SerializeField] public float groundDistance = 0.2f;
 
     // server specific
-    private Dictionary<int, uint> server_tick_number;
+    public Dictionary<int, uint> server_tick_number;
     // Client <-> inputs 
     public Dictionary<int, Queue<CommandMessage>> server_input_msgs;
     private Scene server_scene;
@@ -66,7 +66,12 @@ public class PhysicsProcess : MonoBehaviour
             server_input_msgs.Add(client, cmdsMsgs);
             server_tick_number.Add(client, 0);
         }
-        
+    }
+
+    public void RemoveClientFromPhysics(int client)
+    {
+        server_tick_number.Remove(client);
+        server_input_msgs.Remove(client);
     }
 
     private bool ServerHasInputMessage(Queue<CommandMessage> msgs)

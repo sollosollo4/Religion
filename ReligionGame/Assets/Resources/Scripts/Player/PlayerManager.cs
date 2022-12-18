@@ -44,6 +44,31 @@ public class PlayerManager : MonoBehaviour
         SetGlowEffectsObjects();
     }
 
+    public void Update()
+    {
+        LocalAnimations();
+    }
+
+    void LocalAnimations()
+    {
+        animator.SetFloat("horizontal", GetComponent<PlayerMovement>().horizontalMovement);
+        animator.SetFloat("vertical", GetComponent<PlayerMovement>().verticalMovement);
+
+        animator.SetBool("isSprint", GetComponent<PlayerMovement>().isSprint);
+
+        if (!GetComponent<PlayerMovement>().isGrounded)
+        {
+            animator.SetBool("isGrounded", false);
+            animator.SetFloat("velocityY", Mathf.Sign(GetComponent<PlayerMovement>().rb.velocity.y));
+        }
+
+        if (GetComponent<PlayerMovement>().isGrounded)
+        {
+            animator.SetBool("isGrounded", true);
+            animator.SetFloat("velocityY", 0);
+        }
+    }
+
     private void SetGlowEffectsObjects()
     {
         foreach (var obj in GameManager.instance.scriptableObjectPrefab.GetComponentsInChildren<SpawnedGameObject>())
